@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: train-service
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5050/db
+    password: pass
+    username: user
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        show_sql: true
+    show-sql: true
