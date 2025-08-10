@@ -21,7 +21,6 @@ class MyTransactionalAspect(
 
     private val logger = LoggerFactory.getLogger(MyTransactionalAspect::class.java)
 
-
     @Around("@annotation(com.kotlin.aop.annotation.MyTransactional)")
     fun aroundMyTransactional(joinPoint: ProceedingJoinPoint): Any? {
         val transactionalDefinition = DefaultTransactionDefinition()

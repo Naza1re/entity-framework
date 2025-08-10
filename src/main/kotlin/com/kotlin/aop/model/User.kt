@@ -1,5 +1,6 @@
 package com.kotlin.aop.model
 
+import com.kotlin.aop.model.entity.MyEntity
 import jakarta.persistence.*
 
 @Entity
