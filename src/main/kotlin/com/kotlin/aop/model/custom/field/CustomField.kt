@@ -17,8 +17,7 @@ data class CustomField(
     val min: Int,
     val max: Int,
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "entity_type_id")
-    val entityType: EntityType
+    @OneToMany(mappedBy = "customField" , fetch = FetchType.LAZY)
+    val customFieldToEntityTypes: List<CustomFieldEntityType> = mutableListOf()
 ) {
 }
