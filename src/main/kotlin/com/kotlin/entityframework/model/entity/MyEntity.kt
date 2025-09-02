@@ -1,5 +1,6 @@
 package com.kotlin.entityframework.model.entity
 
+import com.kotlin.entityframework.model.type.EntityType
 import jakarta.persistence.*
 import jakarta.persistence.Entity
 import com.vladmihalcea.hibernate.type.json.JsonType
@@ -23,5 +24,4 @@ data class MyEntity(
     @JoinColumn(name = "entity_type_id")
     val entityType: EntityType
 
-) {
-}
+)

@@ -4,8 +4,7 @@ import com.kotlin.entityframework.dto.entity.request.CreateRequest
 import com.kotlin.entityframework.dto.entity.request.UpdateRequest
 import com.kotlin.entityframework.dto.entity.response.EntityResponse
 import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
-import com.kotlin.entityframework.model.entity.MyEntity
-import com.kotlin.entityframework.service.entity.EntityService
+import com.kotlin.entityframework.service.EntityService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -27,7 +26,7 @@ class EntityController(
     }
 
     @PostMapping
-    fun add(@RequestBody createRequest: CreateRequest): ResponseEntity<EntityResponse> {
+    fun create(@RequestBody createRequest: CreateRequest): ResponseEntity<EntityResponse> {
         return ResponseEntity.status(HttpStatus.CREATED).body(entityService.createEntity(createRequest))
     }
 
@@ -41,5 +40,4 @@ class EntityController(
     fun search(@RequestBody searchRequest: SearchRequest): List<EntityResponse> {
         return entityService.search(searchRequest)
     }
-
 }

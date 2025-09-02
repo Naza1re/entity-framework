@@ -2,7 +2,6 @@ package com.kotlin.entityframework.mapper
 
 import com.kotlin.entityframework.dto.entity.response.EntityResponse
 import com.kotlin.entityframework.model.entity.MyEntity
-import com.kotlin.entityframework.service.UserService
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 
@@ -13,7 +12,6 @@ interface EntityMapper {
     fun toEntityResponse(dto: MyEntity?): EntityResponse?
 
     fun toEntityList(entities: MutableList<MyEntity>?): MutableList<EntityResponse>
-
 
     fun toEntity(model: MyEntity?): MyEntity?
 

@@ -1,6 +1,7 @@
-package com.kotlin.entityframework.model.entity
+package com.kotlin.entityframework.model.type
 
 import com.kotlin.entityframework.model.custom.field.CustomFieldEntityType
+import com.kotlin.entityframework.model.entity.MyEntity
 import jakarta.persistence.*
 
 @Entity
@@ -9,13 +10,13 @@ data class EntityType(
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
-    val name: String,
-    val code: String,
+
+    @Column(name = "name") val name: String,
+    @Column(name = "code") val code: String,
 
     @OneToMany(mappedBy = "entityType", fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)], orphanRemoval = true)
     val customFields: MutableSet<CustomFieldEntityType> = mutableSetOf(),
 
     @OneToMany(mappedBy = "entityType", cascade = [CascadeType.ALL], orphanRemoval = true)
     val entities: List<MyEntity> = mutableListOf(),
-) {
-}
+)

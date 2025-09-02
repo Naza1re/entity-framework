@@ -1,4 +1,4 @@
-package com.kotlin.entityframework.dto.entity.custom.field.value
+package com.kotlin.entityframework.dto.custom.field.value
 
 data class CustomFieldValueResponse(
     val code: String,

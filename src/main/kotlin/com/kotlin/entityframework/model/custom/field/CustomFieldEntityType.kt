@@ -1,6 +1,6 @@
 package com.kotlin.entityframework.model.custom.field
 
-import com.kotlin.entityframework.model.entity.EntityType
+import com.kotlin.entityframework.model.type.EntityType
 import jakarta.persistence.*
 
 @Entity

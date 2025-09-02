@@ -1,4 +1,4 @@
 package com.kotlin.entityframework.service
 
-interface EntitySearchService {
+interface CustomFieldService {
 }

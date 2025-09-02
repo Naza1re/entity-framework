@@ -1,4 +1,4 @@
-package com.kotlin.entityframework.dto.entity.custom.field.response
+package com.kotlin.entityframework.dto.custom.field.response
 
 import com.kotlin.entityframework.model.custom.field.CustomFieldType
 
