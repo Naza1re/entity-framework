@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+           http://www.liquibase.org/xml/ns/dbchangelog
+           https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="NBachishche" id="001-create-custom-field">
+        <sqlFile path="migrations/schema/create-custom-field.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
+    <changeSet author="NBachishche" id="002-create-custom-fields-metadata">
+        <sqlFile path="migrations/schema/create-custom-fields-metadata.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
+    <changeSet author="NBachishche" id="003-create-entity-type">
+        <sqlFile path="migrations/schema/create-entity-type.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
+    <changeSet author="NBachishche" id="004-create-custom-fields-entity-type">
+        <sqlFile path="migrations/schema/create-custom-fields-entity-type.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
+    <changeSet author="NBachishche" id="005-create-my-entity">
+        <sqlFile path="/migrations/schema/create-entity.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
+</databaseChangeLog>
