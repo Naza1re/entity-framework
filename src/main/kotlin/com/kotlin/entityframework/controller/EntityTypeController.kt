@@ -1,5 +1,6 @@
 package com.kotlin.entityframework.controller
 
+import com.kotlin.entityframework.dto.type.response.EntityTypeResponse
 import com.kotlin.entityframework.service.type.EntityTypeServiceImpl
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,7 +15,7 @@ class EntityTypeController(
 ) {
 
     @GetMapping("/{code}")
-    fun get(@PathVariable code: String) : ResponseEntity<com.kotlin.entityframework.dto.type.response.EntityTypeResponse> {
+    fun get(@PathVariable code: String) : ResponseEntity<EntityTypeResponse> {
         return ResponseEntity.ok(entityTypeServiceImpl.getEntityType(code))
     }
 

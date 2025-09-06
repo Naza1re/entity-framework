@@ -7,6 +7,7 @@ import com.vladmihalcea.hibernate.type.json.JsonType
 import org.hibernate.annotations.Type
 
 @Entity
+@Table(name = "entity")
 data class MyEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

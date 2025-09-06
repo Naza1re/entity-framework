@@ -3,6 +3,7 @@ package com.kotlin.entityframework.controller
 import com.kotlin.entityframework.dto.entity.request.CreateRequest
 import com.kotlin.entityframework.dto.entity.request.UpdateRequest
 import com.kotlin.entityframework.dto.entity.response.EntityResponse
+import com.kotlin.entityframework.dto.entity.search.request.QlSearchRequest
 import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
 import com.kotlin.entityframework.service.EntityService
 import org.springframework.http.HttpStatus
@@ -14,6 +15,11 @@ import org.springframework.web.bind.annotation.*
 class EntityController(
     private val entityService: EntityService
 ) {
+
+    @GetMapping
+    fun all(@RequestBody searchRequest: SearchRequest): ResponseEntity<List<EntityResponse>> {
+        return ResponseEntity.ok(entityService.getEntities(searchRequest))
+    }
 
     @GetMapping("/{number}")
     fun get(@PathVariable("number") number: String): ResponseEntity<EntityResponse> {
@@ -37,7 +43,7 @@ class EntityController(
     }
 
     @GetMapping("/search")
-    fun search(@RequestBody searchRequest: SearchRequest): List<EntityResponse> {
-        return entityService.search(searchRequest)
+    fun search(@RequestBody qlSearchRequest: QlSearchRequest): ResponseEntity<List<EntityResponse>> {
+        return ResponseEntity.ok(entityService.search(qlSearchRequest))
     }
 }

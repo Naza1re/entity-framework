@@ -15,8 +15,15 @@ class CustomExceptionHandler {
     @ExceptionHandler(EntityNotFoundException::class,
         EntityTypeNotFoundException::class,
         EntityTypeNotContainsSuchCustomFieldException::class)
-    fun handleNotFound(runtimeException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
+    fun handleNotFound(notFoundException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
         return ResponseEntity<ApplicationExceptionObject>(
-            ApplicationExceptionObject(runtimeException.message!!, 404), HttpStatus.NOT_FOUND)
+            ApplicationExceptionObject(notFoundException.message!!, 404), HttpStatus.NOT_FOUND)
+    }
+
+    @ExceptionHandler()
+    fun handleConflictException(conflictException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
+        return ResponseEntity<ApplicationExceptionObject>(
+            ApplicationExceptionObject(conflictException.message!!, 409), HttpStatus.CONFLICT
+        )
     }
 }

@@ -16,5 +16,4 @@ class CustomFieldEntityType(
     @ManyToOne(fetch = FetchType.LAZY)
     val entityType: EntityType
 
-) {
-}
+)

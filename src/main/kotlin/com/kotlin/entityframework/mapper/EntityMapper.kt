@@ -15,4 +15,6 @@ interface EntityMapper {
 
     fun toEntity(model: MyEntity?): MyEntity?
 
+    fun toEntityListAfterQlSearch(model: MutableList<MyEntity>, params: Map<String, Any?>): MutableList<EntityResponse>
+
 }

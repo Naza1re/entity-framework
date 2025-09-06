@@ -1,6 +1,6 @@
 spring:
   application:
-    name: train-service
+    name: entity-framework
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5050/db
@@ -8,8 +8,12 @@ spring:
     username: user
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         show_sql: true
+        format_sql: true
     show-sql: true
+  liquibase:
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+    enabled: true
