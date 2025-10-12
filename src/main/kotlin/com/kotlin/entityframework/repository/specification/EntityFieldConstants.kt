@@ -2,5 +2,6 @@ package com.kotlin.entityframework.repository.specification
 
 object EntityFieldConstants {
 
-    public final const val ENTITY_NAME = "name"
+    const val ENTITY_NAME = "name"
+    const val ENTITY_NUMBER = "number"
 }

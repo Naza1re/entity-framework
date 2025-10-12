@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface CustomFieldRepository : JpaRepository<CustomField, Long>, JpaSpecificationExecutor<CustomField> {
+    fun findByCode(code: String): CustomField?
 }

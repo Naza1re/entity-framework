@@ -26,6 +26,6 @@ data class CustomField(
     val customFieldToEntityTypes: List<CustomFieldEntityType> = mutableListOf(),
 
     @OneToOne(mappedBy = "customField", cascade = [CascadeType.ALL])
-    val metadata: CustomFieldsMetadata? = null,
+    var metadata: CustomFieldsMetadata? = null,
 
 )

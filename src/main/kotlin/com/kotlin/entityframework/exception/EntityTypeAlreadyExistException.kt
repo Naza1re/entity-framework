@@ -1,4 +1,4 @@
 package com.kotlin.entityframework.exception
 
-class EntityTypeAlreadyExistException(mgs: String) : RuntimeException(mgs) {
+class EntityTypeAlreadyExistException(private val msg: String) : RuntimeException(msg) {
 }
