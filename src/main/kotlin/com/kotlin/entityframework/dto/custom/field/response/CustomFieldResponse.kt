@@ -6,5 +6,4 @@ data class CustomFieldResponse(
     val id: Long,
     val code: String,
     val type: CustomFieldType,
-) {
-}
+)

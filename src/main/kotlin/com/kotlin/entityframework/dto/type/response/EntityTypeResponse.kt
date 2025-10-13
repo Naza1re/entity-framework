@@ -7,6 +7,5 @@ data class EntityTypeResponse(
     val code: String,
     val name: String,
     val description: String,
-    val customFields: List<com.kotlin.entityframework.dto.custom.field.response.CustomFieldResponse>,
-) {
-}
+    val customFields: List<CustomFieldResponse>,
+)

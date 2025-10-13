@@ -1,4 +1,4 @@
 package com.kotlin.entityframework.exception
 
-class EntityNotFoundException(msg: String) : RuntimeException(msg) {
+class EntityNotFoundException(private val msg: String) : RuntimeException(msg) {
 }
