@@ -22,7 +22,7 @@ data class CustomField(
     @Column(name = "min") val min: Int,
     @Column(name = "max") val max: Int,
 
-    @OneToMany(mappedBy = "customField" , fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "customField" , fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = true)
     val customFieldToEntityTypes: List<CustomFieldEntityType> = mutableListOf(),
 
     @OneToOne(mappedBy = "customField", cascade = [CascadeType.ALL])

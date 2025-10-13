@@ -11,7 +11,10 @@ data class EntityType(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long = 0,
 
-    @Column(name = "name") val name: String,
+    @Column(name = "description")
+    var description: String? = null,
+
+    @Column(name = "name") var name: String,
     @Column(name = "code") val code: String,
 
     @OneToMany(mappedBy = "entityType", fetch = FetchType.EAGER, cascade = [(CascadeType.ALL)], orphanRemoval = true)

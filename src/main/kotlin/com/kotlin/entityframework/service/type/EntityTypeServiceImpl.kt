@@ -16,6 +16,7 @@ import com.kotlin.entityframework.model.custom.field.CustomFieldsMetadata
 import com.kotlin.entityframework.model.type.EntityType
 import com.kotlin.entityframework.repository.custom.field.CustomFieldRepository
 import com.kotlin.entityframework.repository.type.EntityTypeRepository
+import com.kotlin.entityframework.service.CustomFieldService
 import com.kotlin.entityframework.service.EntityTypeService
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
@@ -26,6 +27,7 @@ class EntityTypeServiceImpl(
     private val mapper: EntityTypeMapper,
     private val entityTypeProperties: EntityTypeProperties,
     private val customFieldRepository : CustomFieldRepository,
+    private val customFieldsService: CustomFieldService
 ) : EntityTypeService {
 
     override fun createEntityType(request: EntityTypeCreateRequest): EntityTypeResponse? {
@@ -49,7 +51,20 @@ class EntityTypeServiceImpl(
     }
 
     override fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse? {
-        isValidEntityTypeCode(entityTypeCode)
+        val entityType = getEntityTypeByCode(entityTypeCode)
+        customFieldsService
+            .deleteCustomFields(customFieldsService
+                .getCustomFieldsByCodes(updateRequest
+                    .customFieldsToDelete).map { it.code })
+
+        entityType
+            .customFields
+            .addAll(createCustomFieldsEntityTypeLinks(updateRequest.newCustomFields, entityType))
+
+        entityType.name = updateRequest.name
+        entityType.description = updateRequest.description
+
+        return mapper.toEntityTypeResponse(repository.save(entityType))
 
     }
 
