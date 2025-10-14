@@ -10,6 +10,8 @@ import com.kotlin.entityframework.exception.EntityTypeNotContainsSuchCustomField
 import com.kotlin.entityframework.mapper.EntityMapper
 import com.kotlin.entityframework.model.entity.MyEntity
 import com.kotlin.entityframework.model.type.EntityType
+import com.kotlin.entityframework.ql.QlToFilters
+import com.kotlin.entityframework.ql.parser.QlParser
 import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.EntityFieldConstants
 import com.kotlin.entityframework.repository.specification.EntityFieldLikeSpecification
@@ -35,10 +37,14 @@ class EntityServiceImpl (
 
     @Transactional(readOnly = true)
     override fun search(qlSearchRequest: QlSearchRequest): List<EntityResponse> {
+
         val pageRequest = PageRequest.of(qlSearchRequest.page, qlSearchRequest.pageSize)
-        val specification = EntityPropertiesSpecifications.byProperties(parseQuery(qlSearchRequest.query))
+        val expression = QlParser.parse(qlSearchRequest.query)
+        val filters = QlToFilters.toMap(expression)
+        val specification = EntityPropertiesSpecifications.byProperties(filters)
+
         val entityList = repository.findAll(specification, pageRequest)
-        return entityMapper.toEntityListAfterQlSearch(entityList.content, parseQuery(qlSearchRequest.query))
+        return entityMapper.toEntityListAfterQlSearch(entityList.content)
     }
 
     @Transactional
@@ -114,17 +120,6 @@ class EntityServiceImpl (
         val spec = EntityFieldLikeSpecification.entityFieldLike(EntityFieldConstants.ENTITY_NAME, searchRequest.keyword)
         val findEntityList = repository.findAll(spec, pageRequest)
         return entityMapper.toEntityList(findEntityList.content)
-    }
-
-    fun parseQuery(query: String): Map<String, Any> {
-        return query.split("and")
-            .map { it.trim() }
-            .map { condition ->
-                val parts = condition.split("=")
-                val key = parts[0].trim()
-                val value = parts[1].trim().removeSurrounding("'")
-                key to value
-            }.toMap()
     }
 
 }
