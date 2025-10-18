@@ -21,6 +21,7 @@ import com.kotlin.entityframework.service.type.EntityTypeServiceImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -58,6 +59,7 @@ class EntityServiceImpl (
                 properties = putElementsToEntity(createRequest.params),
                 entityType = entityType,
                 name = createRequest.name,
+                updatedAt = LocalDateTime.now(),
         )
         val savedEntity = repository.save(entityToSave)
         return entityMapper.toEntityResponse(savedEntity)
@@ -106,6 +108,7 @@ class EntityServiceImpl (
             name = updateRequest.name
             properties = putElementsToEntity(updateRequest.params)
             entityType = entityTypeByCode
+            updatedAt = LocalDateTime.now()
         }
 
         val updatedEntity = repository.save(entity)

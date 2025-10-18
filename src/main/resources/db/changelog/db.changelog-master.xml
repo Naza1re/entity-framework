@@ -27,4 +27,9 @@
                  splitStatements="false"/>
     </changeSet>
 
+    <changeSet author="NBachishche" id="006-add-create-date-and-update-date-to-entity">
+        <sqlFile path="migrations/schema/add-create-date-and-update-date-to-entity.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
 </databaseChangeLog>

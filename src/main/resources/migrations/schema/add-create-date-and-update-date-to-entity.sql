@@ -1,0 +1,5 @@
+ALTER TABLE entity
+    ADD COLUMN created_at TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE entity
+    ADD COLUMN updated_at TIMESTAMP DEFAULT NOW();

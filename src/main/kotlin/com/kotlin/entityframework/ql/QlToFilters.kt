@@ -7,6 +7,8 @@ import com.kotlin.entityframework.ql.expression.*
  */
 object QlToFilters {
 
+    private const val LIKE_MARK = "_like"
+
     fun toMap(expr: QlExpression): Map<String, Any> {
         val result = mutableMapOf<String, Any>()
         collect(expr, result)
@@ -16,7 +18,7 @@ object QlToFilters {
     private fun collect(expr: QlExpression, map: MutableMap<String, Any>) {
         when (expr) {
             is EqualsExpr -> map[expr.field] = expr.value
-            is LikeExpr -> map[expr.field+"_like"] = expr.value
+            is LikeExpr -> map[expr.field + LIKE_MARK] = expr.value
             is AndExpr -> {
                 collect(expr.left, map)
                 collect(expr.right, map)
