@@ -8,8 +8,10 @@ import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
 import com.kotlin.entityframework.exception.EntityNotFoundException
 import com.kotlin.entityframework.exception.EntityTypeNotContainsSuchCustomFieldException
 import com.kotlin.entityframework.mapper.EntityMapper
-import com.kotlin.entityframework.model.entity.MyEntity
+import com.kotlin.entityframework.model.entity.Entity
 import com.kotlin.entityframework.model.type.EntityType
+import com.kotlin.entityframework.ql.QlToFilters
+import com.kotlin.entityframework.ql.parser.QlParser
 import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.EntityFieldConstants
 import com.kotlin.entityframework.repository.specification.EntityFieldLikeSpecification
@@ -35,26 +37,30 @@ class EntityServiceImpl (
 
     @Transactional(readOnly = true)
     override fun search(qlSearchRequest: QlSearchRequest): List<EntityResponse> {
+
         val pageRequest = PageRequest.of(qlSearchRequest.page, qlSearchRequest.pageSize)
-        val specification = EntityPropertiesSpecifications.byProperties(parseQuery(qlSearchRequest.query))
+        val expression = QlParser.parse(qlSearchRequest.query)
+        val filters = QlToFilters.toMap(expression)
+        val specification = EntityPropertiesSpecifications.byProperties(filters)
+
         val entityList = repository.findAll(specification, pageRequest)
-        return entityMapper.toEntityListAfterQlSearch(entityList.content, parseQuery(qlSearchRequest.query))
+        return entityMapper.toEntityListAfterQlSearch(entityList.content)
     }
 
     @Transactional
     override fun createEntity(createRequest: CreateRequest): EntityResponse {
         val entityTypeCode = createRequest.entityTypeCode
         val entityType = entityTypeServiceImpl.getEntityTypeByCode(entityTypeCode)
-            validateCustomFields(createRequest.params, entityType!!)
-        val entityToSave = MyEntity(
+            validateCustomFields(createRequest.params, entityType)
+        val entityToSave = Entity(
                 id = 0,
-                name = createRequest.name,
                 number = UUID.randomUUID().toString(),
                 properties = putElementsToEntity(createRequest.params),
-                entityType = entityType
+                entityType = entityType,
+                name = createRequest.name,
         )
         val savedEntity = repository.save(entityToSave)
-        return entityMapper.toEntityResponse(savedEntity)!!
+        return entityMapper.toEntityResponse(savedEntity)
 
     }
 
@@ -64,7 +70,7 @@ class EntityServiceImpl (
         repository.delete(entity)
     }
 
-    private fun getEntityOrThrow(number: String ): MyEntity {
+    private fun getEntityOrThrow(number: String ): Entity {
         return repository.findByNumber(number)
                 ?: throw EntityNotFoundException(number)
     }
@@ -73,12 +79,11 @@ class EntityServiceImpl (
         val listOfEntityTypeFields = entityType.customFields.map {
              customField -> customField.customField.code
         }
-        for ((key, value ) in params) {
+        for (key in params.keys) {
             if (!listOfEntityTypeFields.contains(key)) {
                 throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")
             }
         }
-        TODO("Validation")
     }
 
     private fun putElementsToEntity(params: Map<String, Any>) : Map<String, Any> {
@@ -90,21 +95,20 @@ class EntityServiceImpl (
     }
 
     @Transactional
-    override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse? {
+    override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse {
         val entity = getEntityOrThrow(number)
-        val entityType = entityTypeServiceImpl.getEntityTypeByCode(entity.entityType.code)
-        if (entityType != null) {
-            validateCustomFields(updateRequest.params, entityType)
+
+        val entityTypeByCode = entityTypeServiceImpl.getEntityTypeByCode(entity.entityType.code)
+
+        validateCustomFields(updateRequest.params, entityTypeByCode)
+
+        entity.apply {
+            name = updateRequest.name
+            properties = putElementsToEntity(updateRequest.params)
+            entityType = entityTypeByCode
         }
 
-        val entityToSave = MyEntity(
-            id = entity.id,
-            name = updateRequest.name,
-            number = UUID.randomUUID().toString(),
-            properties = putElementsToEntity(updateRequest.params),
-            entityType = entityType!!
-        )
-        val updatedEntity = repository.save(entityToSave)
+        val updatedEntity = repository.save(entity)
         return entityMapper.toEntityResponse(updatedEntity)
     }
 
@@ -114,17 +118,6 @@ class EntityServiceImpl (
         val spec = EntityFieldLikeSpecification.entityFieldLike(EntityFieldConstants.ENTITY_NAME, searchRequest.keyword)
         val findEntityList = repository.findAll(spec, pageRequest)
         return entityMapper.toEntityList(findEntityList.content)
-    }
-
-    fun parseQuery(query: String): Map<String, Any> {
-        return query.split("and")
-            .map { it.trim() }
-            .map { condition ->
-                val parts = condition.split("=")
-                val key = parts[0].trim()
-                val value = parts[1].trim().removeSurrounding("'")
-                key to value
-            }.toMap()
     }
 
 }

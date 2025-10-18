@@ -1,8 +1,6 @@
 package com.kotlin.entityframework.exception.handler
 
-import com.kotlin.entityframework.exception.EntityNotFoundException
-import com.kotlin.entityframework.exception.EntityTypeNotContainsSuchCustomFieldException
-import com.kotlin.entityframework.exception.EntityTypeNotFoundException
+import com.kotlin.entityframework.exception.*
 import com.kotlin.entityframework.exception.error.ApplicationExceptionObject
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -20,10 +18,19 @@ class CustomExceptionHandler {
             ApplicationExceptionObject(notFoundException.message!!, 404), HttpStatus.NOT_FOUND)
     }
 
-    @ExceptionHandler()
+    @ExceptionHandler(EntityTypeCodeNotAlloyedException::class,
+        EntityTypeAlreadyExistException::class,
+        NotAlloyedValueException::class,)
     fun handleConflictException(conflictException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
         return ResponseEntity<ApplicationExceptionObject>(
             ApplicationExceptionObject(conflictException.message!!, 409), HttpStatus.CONFLICT
+        )
+    }
+
+    @ExceptionHandler(QlParseException::class)
+    fun handleParseException(qlParseException: QlParseException) : ResponseEntity<ApplicationExceptionObject> {
+        return ResponseEntity<ApplicationExceptionObject>(
+            ApplicationExceptionObject(qlParseException.message!!, 400), HttpStatus.BAD_REQUEST
         )
     }
 }

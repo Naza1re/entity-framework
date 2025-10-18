@@ -1,20 +1,19 @@
 package com.kotlin.entityframework.mapper
 
 import com.kotlin.entityframework.dto.entity.response.EntityResponse
-import com.kotlin.entityframework.model.entity.MyEntity
+import com.kotlin.entityframework.model.entity.Entity
 import org.mapstruct.Mapper
 import org.mapstruct.Mapping
 
 @Mapper(componentModel = "spring", uses = [CustomFieldMapper::class])
 interface EntityMapper {
 
-    @Mapping(source = "properties", target = "customValue", qualifiedByName = ["toCustomFieldValue"])
-    fun toEntityResponse(dto: MyEntity?): EntityResponse?
+    @Mapping(source = "entity.entityType.code", target = "entityTypeCode")
+    @Mapping(source = "properties", target = "customFieldsValue", qualifiedByName = ["toCustomFieldValue"])
+    fun toEntityResponse(entity: Entity): EntityResponse
 
-    fun toEntityList(entities: MutableList<MyEntity>?): MutableList<EntityResponse>
+    fun toEntityList(entities: MutableList<Entity>?): MutableList<EntityResponse>
 
-    fun toEntity(model: MyEntity?): MyEntity?
-
-    fun toEntityListAfterQlSearch(model: MutableList<MyEntity>, params: Map<String, Any?>): MutableList<EntityResponse>
+    fun toEntityListAfterQlSearch(model: MutableList<Entity>): MutableList<EntityResponse>
 
 }

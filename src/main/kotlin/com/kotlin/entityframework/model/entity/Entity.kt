@@ -8,21 +8,22 @@ import org.hibernate.annotations.Type
 
 @Entity
 @Table(name = "entity")
-data class MyEntity(
+data class Entity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     val id: Long,
 
-    val name: String,
-
+    @Column(name = "number")
     val number: String,
+
+    @Column(name = "name")
+    var name: String,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
-    val properties: Map<String, Any>? = null,
+    var properties: Map<String, Any>? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entity_type_id")
-    val entityType: EntityType
-
+    var entityType: EntityType
 )

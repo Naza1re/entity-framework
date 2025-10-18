@@ -34,7 +34,8 @@ class EntityTypeServiceImpl(
         isValidEntityTypeCode(request.code)
         val entityType = EntityType(
             name = request.name,
-            code = request.code
+            code = request.code,
+            description = request.description,
         )
         entityType
             .customFields
@@ -118,7 +119,6 @@ class EntityTypeServiceImpl(
                 customField = customField,
                 entityType = entityType
             )
-
         }
     }
 }
