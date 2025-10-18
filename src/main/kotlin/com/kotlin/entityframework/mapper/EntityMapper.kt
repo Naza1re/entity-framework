@@ -8,8 +8,9 @@ import org.mapstruct.Mapping
 @Mapper(componentModel = "spring", uses = [CustomFieldMapper::class])
 interface EntityMapper {
 
+    @Mapping(source = "entity.entityType.code", target = "entityTypeCode")
     @Mapping(source = "properties", target = "customFieldsValue", qualifiedByName = ["toCustomFieldValue"])
-    fun toEntityResponse(dto: MyEntity?): EntityResponse?
+    fun toEntityResponse(entity: MyEntity?): EntityResponse?
 
     fun toEntityList(entities: MutableList<MyEntity>?): MutableList<EntityResponse>
 

@@ -84,7 +84,6 @@ class EntityServiceImpl (
                 throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")
             }
         }
-        TODO("Validation")
     }
 
     private fun putElementsToEntity(params: Map<String, Any>) : Map<String, Any> {

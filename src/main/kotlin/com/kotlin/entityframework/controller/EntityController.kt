@@ -27,7 +27,7 @@ class EntityController(
     }
 
     @PatchMapping("/{number}")
-    fun patch(@PathVariable("number") number: String, updateRequest: UpdateRequest): ResponseEntity<EntityResponse> {
+    fun patch(@PathVariable("number") number: String, @RequestBody updateRequest: UpdateRequest): ResponseEntity<EntityResponse> {
         return ResponseEntity.ok(entityService.updateEntity(number, updateRequest))
     }
 

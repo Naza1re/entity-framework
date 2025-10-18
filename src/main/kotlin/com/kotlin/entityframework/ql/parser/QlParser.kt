@@ -1,5 +1,7 @@
 package com.kotlin.entityframework.ql.parser
 
+import com.kotlin.entityframework.exception.QlParseException
+import com.kotlin.entityframework.ql.QlOperators
 import com.kotlin.entityframework.ql.expression.AndExpr
 import com.kotlin.entityframework.ql.expression.EqualsExpr
 import com.kotlin.entityframework.ql.expression.OrExpr
@@ -9,6 +11,7 @@ object QlParser {
 
     fun parse(input: String): QlExpression {
         val tokens = tokenize(input)
+        println(tokens)
         return parseTokens(tokens)
     }
 
@@ -19,7 +22,7 @@ object QlParser {
 
     private fun parseTokens(tokens: List<String>): QlExpression {
         // OR
-        val orIndex = tokens.indexOfFirst { it.equals("or", ignoreCase = true) }
+        val orIndex = tokens.indexOfFirst { it.equals(QlOperators.OR, ignoreCase = true) }
         if (orIndex != -1) {
             val left = parseTokens(tokens.subList(0, orIndex))
             val right = parseTokens(tokens.subList(orIndex + 1, tokens.size))
@@ -27,7 +30,7 @@ object QlParser {
         }
 
         // AND
-        val andIndex = tokens.indexOfFirst { it.equals("and", ignoreCase = true) }
+        val andIndex = tokens.indexOfFirst { it.equals(QlOperators.AND, ignoreCase = true) }
         if (andIndex != -1) {
             val left = parseTokens(tokens.subList(0, andIndex))
             val right = parseTokens(tokens.subList(andIndex + 1, tokens.size))
@@ -35,12 +38,12 @@ object QlParser {
         }
 
         //  field = 'value'
-        if (tokens.size == 3 && tokens[1] == "=") {
+        if (tokens.size == 3 && tokens[1] == QlOperators.EQUALS) {
             val field = tokens[0]
             val value = tokens[2].removeSurrounding("'")
             return EqualsExpr(field, value)
         }
 
-        throw IllegalArgumentException("Некорректное выражение: ${tokens.joinToString(" ")}")
+        throw QlParseException("Некорректное выражение: ${tokens.joinToString(" ")}")
     }
 }
