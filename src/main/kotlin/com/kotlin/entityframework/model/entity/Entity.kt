@@ -8,16 +8,16 @@ import org.hibernate.annotations.Type
 
 @Entity
 @Table(name = "entity")
-data class MyEntity(
+data class Entity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     val id: Long,
 
-    @Column(name = "name")
-    var name: String,
-
     @Column(name = "number")
     val number: String,
+
+    @Column(name = "name")
+    var name: String,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
@@ -26,5 +26,4 @@ data class MyEntity(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entity_type_id")
     var entityType: EntityType
-
 )

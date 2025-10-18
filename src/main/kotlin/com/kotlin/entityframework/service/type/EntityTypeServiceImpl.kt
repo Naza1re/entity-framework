@@ -119,7 +119,6 @@ class EntityTypeServiceImpl(
                 customField = customField,
                 entityType = entityType
             )
-
         }
     }
 }

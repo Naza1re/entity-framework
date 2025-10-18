@@ -8,7 +8,7 @@ import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
 import com.kotlin.entityframework.exception.EntityNotFoundException
 import com.kotlin.entityframework.exception.EntityTypeNotContainsSuchCustomFieldException
 import com.kotlin.entityframework.mapper.EntityMapper
-import com.kotlin.entityframework.model.entity.MyEntity
+import com.kotlin.entityframework.model.entity.Entity
 import com.kotlin.entityframework.model.type.EntityType
 import com.kotlin.entityframework.ql.QlToFilters
 import com.kotlin.entityframework.ql.parser.QlParser
@@ -51,16 +51,16 @@ class EntityServiceImpl (
     override fun createEntity(createRequest: CreateRequest): EntityResponse {
         val entityTypeCode = createRequest.entityTypeCode
         val entityType = entityTypeServiceImpl.getEntityTypeByCode(entityTypeCode)
-            validateCustomFields(createRequest.params, entityType!!)
-        val entityToSave = MyEntity(
+            validateCustomFields(createRequest.params, entityType)
+        val entityToSave = Entity(
                 id = 0,
-                name = createRequest.name,
                 number = UUID.randomUUID().toString(),
                 properties = putElementsToEntity(createRequest.params),
-                entityType = entityType
+                entityType = entityType,
+                name = createRequest.name,
         )
         val savedEntity = repository.save(entityToSave)
-        return entityMapper.toEntityResponse(savedEntity)!!
+        return entityMapper.toEntityResponse(savedEntity)
 
     }
 
@@ -70,7 +70,7 @@ class EntityServiceImpl (
         repository.delete(entity)
     }
 
-    private fun getEntityOrThrow(number: String ): MyEntity {
+    private fun getEntityOrThrow(number: String ): Entity {
         return repository.findByNumber(number)
                 ?: throw EntityNotFoundException(number)
     }
@@ -95,7 +95,7 @@ class EntityServiceImpl (
     }
 
     @Transactional
-    override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse? {
+    override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse {
         val entity = getEntityOrThrow(number)
 
         val entityTypeByCode = entityTypeServiceImpl.getEntityTypeByCode(entity.entityType.code)

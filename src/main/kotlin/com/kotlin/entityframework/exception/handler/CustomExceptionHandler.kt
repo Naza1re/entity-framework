@@ -19,10 +19,18 @@ class CustomExceptionHandler {
     }
 
     @ExceptionHandler(EntityTypeCodeNotAlloyedException::class,
-        EntityTypeAlreadyExistException::class)
+        EntityTypeAlreadyExistException::class,
+        NotAlloyedValueException::class,)
     fun handleConflictException(conflictException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
         return ResponseEntity<ApplicationExceptionObject>(
             ApplicationExceptionObject(conflictException.message!!, 409), HttpStatus.CONFLICT
+        )
+    }
+
+    @ExceptionHandler(QlParseException::class)
+    fun handleParseException(qlParseException: QlParseException) : ResponseEntity<ApplicationExceptionObject> {
+        return ResponseEntity<ApplicationExceptionObject>(
+            ApplicationExceptionObject(qlParseException.message!!, 400), HttpStatus.BAD_REQUEST
         )
     }
 }

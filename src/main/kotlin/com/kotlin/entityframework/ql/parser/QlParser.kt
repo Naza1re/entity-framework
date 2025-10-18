@@ -2,21 +2,17 @@ package com.kotlin.entityframework.ql.parser
 
 import com.kotlin.entityframework.exception.QlParseException
 import com.kotlin.entityframework.ql.QlOperators
-import com.kotlin.entityframework.ql.expression.AndExpr
-import com.kotlin.entityframework.ql.expression.EqualsExpr
-import com.kotlin.entityframework.ql.expression.OrExpr
-import com.kotlin.entityframework.ql.expression.QlExpression
+import com.kotlin.entityframework.ql.expression.*
 
 object QlParser {
 
     fun parse(input: String): QlExpression {
         val tokens = tokenize(input)
-        println(tokens)
         return parseTokens(tokens)
     }
 
     private fun tokenize(input: String): List<String> {
-        val regex = Regex("\\s*(and|or|=|'[^']*'|\\w+)\\s*", RegexOption.IGNORE_CASE)
+        val regex = Regex("\\s*(and|or|like|=|'[^']*'|\\w+)\\s*", RegexOption.IGNORE_CASE)
         return regex.findAll(input).map { it.groupValues[1].trim() }.toList()
     }
 
@@ -42,6 +38,13 @@ object QlParser {
             val field = tokens[0]
             val value = tokens[2].removeSurrounding("'")
             return EqualsExpr(field, value)
+        }
+
+        // field like '%value%'
+        if (tokens.size == 3 && tokens[1] == QlOperators.LIKE) {
+            val field = tokens[0]
+            val value = "%${tokens[2].removeSurrounding("'")}%"
+            return LikeExpr(field, value)
         }
 
         throw QlParseException("Некорректное выражение: ${tokens.joinToString(" ")}")

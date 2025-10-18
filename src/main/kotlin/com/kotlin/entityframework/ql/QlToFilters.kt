@@ -1,9 +1,6 @@
 package com.kotlin.entityframework.ql
 
-import com.kotlin.entityframework.ql.expression.AndExpr
-import com.kotlin.entityframework.ql.expression.EqualsExpr
-import com.kotlin.entityframework.ql.expression.OrExpr
-import com.kotlin.entityframework.ql.expression.QlExpression
+import com.kotlin.entityframework.ql.expression.*
 
 /**
  * QlExpression → Map<String, Any>.
@@ -19,6 +16,7 @@ object QlToFilters {
     private fun collect(expr: QlExpression, map: MutableMap<String, Any>) {
         when (expr) {
             is EqualsExpr -> map[expr.field] = expr.value
+            is LikeExpr -> map[expr.field+"_like"] = expr.value
             is AndExpr -> {
                 collect(expr.left, map)
                 collect(expr.right, map)

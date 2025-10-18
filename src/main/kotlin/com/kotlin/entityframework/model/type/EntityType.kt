@@ -1,10 +1,10 @@
 package com.kotlin.entityframework.model.type
 
 import com.kotlin.entityframework.model.custom.field.CustomFieldEntityType
-import com.kotlin.entityframework.model.entity.MyEntity
+import com.kotlin.entityframework.model.entity.Entity
 import jakarta.persistence.*
 
-@Entity
+@jakarta.persistence.Entity
 @Table(name = "entity_type")
 data class EntityType(
 
@@ -21,5 +21,5 @@ data class EntityType(
     val customFields: MutableSet<CustomFieldEntityType> = mutableSetOf(),
 
     @OneToMany(mappedBy = "entityType", cascade = [CascadeType.ALL], orphanRemoval = true)
-    val entities: List<MyEntity> = mutableListOf(),
+    val entities: List<Entity> = mutableListOf(),
 )
