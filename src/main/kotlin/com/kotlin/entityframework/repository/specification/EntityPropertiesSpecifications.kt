@@ -10,7 +10,7 @@ object EntityPropertiesSpecifications {
     private const val EXTRACT_PATH_TEXT = "jsonb_extract_path_text"
 
     fun byProperties(filters: Map<String, Any>): Specification<MyEntity> {
-        return Specification { root, query, cb ->
+        return Specification { root, _, cb ->
             val predicates = mutableListOf<Predicate>()
             for ((key, value) in filters) {
                 val jsonExtract = cb.function(

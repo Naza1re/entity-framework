@@ -79,7 +79,7 @@ class EntityServiceImpl (
         val listOfEntityTypeFields = entityType.customFields.map {
              customField -> customField.customField.code
         }
-        for ((key, value ) in params) {
+        for (key in params.keys) {
             if (!listOfEntityTypeFields.contains(key)) {
                 throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")
             }
@@ -98,19 +98,18 @@ class EntityServiceImpl (
     @Transactional
     override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse? {
         val entity = getEntityOrThrow(number)
-        val entityType = entityTypeServiceImpl.getEntityTypeByCode(entity.entityType.code)
-        if (entityType != null) {
-            validateCustomFields(updateRequest.params, entityType)
+
+        val entityTypeByCode = entityTypeServiceImpl.getEntityTypeByCode(entity.entityType.code)
+
+        validateCustomFields(updateRequest.params, entityTypeByCode)
+
+        entity.apply {
+            name = updateRequest.name
+            properties = putElementsToEntity(updateRequest.params)
+            entityType = entityTypeByCode
         }
 
-        val entityToSave = MyEntity(
-            id = entity.id,
-            name = updateRequest.name,
-            number = UUID.randomUUID().toString(),
-            properties = putElementsToEntity(updateRequest.params),
-            entityType = entityType!!
-        )
-        val updatedEntity = repository.save(entityToSave)
+        val updatedEntity = repository.save(entity)
         return entityMapper.toEntityResponse(updatedEntity)
     }
 

@@ -13,16 +13,18 @@ data class MyEntity(
     @Id
     val id: Long,
 
-    val name: String,
+    @Column(name = "name")
+    var name: String,
 
+    @Column(name = "number")
     val number: String,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
-    val properties: Map<String, Any>? = null,
+    var properties: Map<String, Any>? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entity_type_id")
-    val entityType: EntityType
+    var entityType: EntityType
 
 )
