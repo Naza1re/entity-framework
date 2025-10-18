@@ -8,4 +8,5 @@ interface CustomFieldService {
     fun createCustomFieldsToEntityType(customFieldsRequest: CustomFieldRequest) : List<CustomField>
     fun deleteCustomFields(customFieldCodes: List<String>)
     fun getCustomFieldsByCodes(customFieldCodes: List<String>) : List<CustomField>
+    fun getCustomFieldByCode(code: String) : CustomField
 }
