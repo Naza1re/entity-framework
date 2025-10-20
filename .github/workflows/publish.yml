@@ -36,6 +36,10 @@ jobs:
       - name: Build
         run: ./gradlew clean build -x test
 
+      - name: Debug env
+        run: |
+          echo "USERNAME_GITHUB=$USERNAME_GITHUB"
+
       - name: Publish to GitHub Packages
         env:
           USERNAME_GITHUB: ${{ github.actor }}
