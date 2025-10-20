@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env: # вот здесь
         USERNAME_GITHUB: ${{ github.actor }}
-        TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+        TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
 
     steps:
       - name: Checkout repository
@@ -47,5 +47,5 @@ jobs:
       - name: Publish to GitHub Packages
         env:
           USERNAME_GITHUB: ${{ github.actor }}
-          TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
+          TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
         run: ./gradlew publish
