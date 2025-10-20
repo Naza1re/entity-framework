@@ -1,7 +1,7 @@
 package com.kotlin.entityframework.exception.error
 
-class ApplicationExceptionObject(
-    private val message: String,
-    private val statusCode: Int
+data class ApplicationExceptionObject(
+    val message: String,
+    val statusCode: Int
 ) {
 }

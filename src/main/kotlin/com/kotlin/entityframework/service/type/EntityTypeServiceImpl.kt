@@ -92,7 +92,7 @@ class EntityTypeServiceImpl(
     private fun isValidEntityTypeCode(entityTypeCode: String) {
         val entityType = getNullableEntityType(entityTypeCode)
         if (entityType != null || entityTypeProperties.excludedCodes.contains(entityTypeCode)) {
-            throw EntityTypeCodeNotAlloyedException("Entity type with code $entityTypeCode not alloyed")
+            throw  EntityTypeCodeNotAlloyedException("Entity type with code '$entityTypeCode' not alloyed")
         }
     }
 
