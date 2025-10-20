@@ -1,14 +1,16 @@
 plugins {
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.spring") version "1.9.25"
-    id("org.springframework.boot") version "3.5.4"
-    id("io.spring.dependency-management") version "1.1.7"
     kotlin("plugin.jpa") version "1.9.25"
     kotlin("kapt") version "1.9.25"
+    id("java-library")
+    id("maven-publish")
+    id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.kotlin"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.4"
+description = "entity-framework"
 
 java {
     toolchain {
@@ -16,10 +18,10 @@ java {
     }
 }
 
-configurations {
-    compileOnly {
-        extendsFrom(configurations.annotationProcessor.get())
-    }
+tasks.jar {
+    archiveBaseName.set("entity-framework")
+    archiveVersion.set(version.toString())
+    archiveClassifier.set("")
 }
 
 repositories {
@@ -27,20 +29,19 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.liquibase:liquibase-core:4.33.0")
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:3.5.4"))
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.liquibase:liquibase-core")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    implementation("org.postgresql:postgresql:42.3.10")
+    implementation("org.postgresql:postgresql")
     implementation("com.vladmihalcea:hibernate-types-60:2.21.1")
     implementation("org.mapstruct:mapstruct:1.6.3")
     kapt("org.mapstruct:mapstruct-processor:1.6.3")
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
+    compileOnly("org.projectlombok:lombok:1.18.32")
+    annotationProcessor("org.projectlombok:lombok:1.18.32")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 kotlin {
@@ -57,4 +58,32 @@ allOpen {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("gpr") {
+            from(components["java"])
+            groupId = "com.kotlin"
+            artifactId = "entity-framework"
+            version = project.version.toString()
+        }
+    }
+
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/Naza1re/entity-framework")
+            credentials {
+                username = project.findProperty("gpr.user") as? String ?: System.getenv("USERNAME_GITHUB")
+                password = project.findProperty("gpr.key") as? String ?: System.getenv("TOKEN_GITHUB")
+            }
+        }
+    }
 }

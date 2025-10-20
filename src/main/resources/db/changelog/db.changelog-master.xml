@@ -7,6 +7,11 @@
            http://www.liquibase.org/xml/ns/dbchangelog
            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
+    <changeSet author="NBachishche" id="001-create-custom-fields">
+        <sqlFile path="migrations/schema/create-custom-field.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
     <changeSet author="NBachishche" id="002-create-custom-fields-metadata">
         <sqlFile path="migrations/schema/create-custom-fields-metadata.sql"
                  splitStatements="false"/>
@@ -24,6 +29,11 @@
 
     <changeSet author="NBachishche" id="005-create-my-entity">
         <sqlFile path="/migrations/schema/create-entity.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
+    <changeSet author="NBachishche" id="006-add-create-date-and-update-date-to-entity">
+        <sqlFile path="migrations/schema/add-create-date-and-update-date-to-entity.sql"
                  splitStatements="false"/>
     </changeSet>
 

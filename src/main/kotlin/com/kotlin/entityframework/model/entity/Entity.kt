@@ -5,6 +5,7 @@ import jakarta.persistence.*
 import jakarta.persistence.Entity
 import com.vladmihalcea.hibernate.type.json.JsonType
 import org.hibernate.annotations.Type
+import java.time.LocalDateTime
 
 @Entity
 @Table(name = "entity")
@@ -18,6 +19,12 @@ data class Entity(
 
     @Column(name = "name")
     var name: String,
+
+    @Column(name = "created_at")
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+
+    @Column(name = "updated_at")
+    var updatedAt: LocalDateTime,
 
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")

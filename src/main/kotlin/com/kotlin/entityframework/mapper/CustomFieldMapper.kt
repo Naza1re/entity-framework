@@ -2,7 +2,6 @@ package com.kotlin.entityframework.mapper
 
 import com.kotlin.entityframework.dto.custom.field.response.CustomFieldResponse
 import com.kotlin.entityframework.dto.custom.field.value.CustomFieldValueResponse
-import com.kotlin.entityframework.model.custom.field.CustomField
 import com.kotlin.entityframework.model.custom.field.CustomFieldEntityType
 import org.mapstruct.Mapper
 import org.mapstruct.Named

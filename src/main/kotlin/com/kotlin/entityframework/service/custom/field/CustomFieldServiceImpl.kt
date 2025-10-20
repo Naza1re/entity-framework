@@ -1,6 +1,7 @@
 package com.kotlin.entityframework.service.custom.field
 
 import com.kotlin.entityframework.dto.custom.field.request.CustomFieldRequest
+import com.kotlin.entityframework.exception.CustomFieldNotFoundException
 import com.kotlin.entityframework.model.custom.field.CustomField
 import com.kotlin.entityframework.repository.custom.field.CustomFieldRepository
 import com.kotlin.entityframework.service.CustomFieldService
@@ -20,6 +21,9 @@ class CustomFieldServiceImpl(
 
     override fun getCustomFieldsByCodes(customFieldCodes: List<String>): List<CustomField> {
         return repository.findByCodeIn(customFieldCodes)
+    }
+    override fun getCustomFieldByCode(code : String) : CustomField {
+        return repository.findByCode(code) ?: throw CustomFieldNotFoundException("Custom field with code $code not found")
     }
 
 

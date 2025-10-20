@@ -7,6 +7,7 @@ import com.kotlin.entityframework.dto.entity.search.request.QlSearchRequest
 import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
 import com.kotlin.entityframework.exception.EntityNotFoundException
 import com.kotlin.entityframework.exception.EntityTypeNotContainsSuchCustomFieldException
+import com.kotlin.entityframework.exception.NotAlloyedValueException
 import com.kotlin.entityframework.mapper.EntityMapper
 import com.kotlin.entityframework.model.entity.Entity
 import com.kotlin.entityframework.model.type.EntityType
@@ -16,11 +17,13 @@ import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.EntityFieldConstants
 import com.kotlin.entityframework.repository.specification.EntityFieldLikeSpecification
 import com.kotlin.entityframework.repository.specification.EntityPropertiesSpecifications
+import com.kotlin.entityframework.service.CustomFieldService
 import com.kotlin.entityframework.service.EntityService
 import com.kotlin.entityframework.service.type.EntityTypeServiceImpl
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.time.LocalDateTime
 import java.util.*
 
 @Service
@@ -28,6 +31,7 @@ class EntityServiceImpl (
     private val repository : EntityRepository,
     private val entityTypeServiceImpl : EntityTypeServiceImpl,
     private val entityMapper: EntityMapper,
+    private val customFieldService: CustomFieldService
 ) : EntityService {
 
     @Transactional(readOnly = true)
@@ -58,6 +62,7 @@ class EntityServiceImpl (
                 properties = putElementsToEntity(createRequest.params),
                 entityType = entityType,
                 name = createRequest.name,
+                updatedAt = LocalDateTime.now(),
         )
         val savedEntity = repository.save(entityToSave)
         return entityMapper.toEntityResponse(savedEntity)
@@ -76,13 +81,28 @@ class EntityServiceImpl (
     }
 
     private fun validateCustomFields(params: Map<String, Any>, entityType: EntityType) {
-        val listOfEntityTypeFields = entityType.customFields.map {
-             customField -> customField.customField.code
+        val listOfEntityTypeFields = entityType.customFields
+        val customFieldCodes = listOfEntityTypeFields.map {
+                customField -> customField.customField.code
         }
         for (key in params.keys) {
-            if (!listOfEntityTypeFields.contains(key)) {
+            if (!customFieldCodes.contains(key)) {
                 throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")
             }
+            val value = params[key]
+            val customField = customFieldService.getCustomFieldByCode(key)
+            val max = customField.max
+            val min = customField.min
+            when (value) {
+                is String -> {
+                    if (value.length > max || value.length < min) {
+                        throw NotAlloyedValueException("Value $value cannot be more than $max or less than $min for customField with code : ${customField.code}") }
+                }
+                is Int -> {
+                    if (value > max || value < min) {
+                        throw NotAlloyedValueException("Value $value cannot be more than $max or less than $min for customField with code : ${customField.code}") }
+                    }
+                }
         }
     }
 
@@ -106,6 +126,7 @@ class EntityServiceImpl (
             name = updateRequest.name
             properties = putElementsToEntity(updateRequest.params)
             entityType = entityTypeByCode
+            updatedAt = LocalDateTime.now()
         }
 
         val updatedEntity = repository.save(entity)
