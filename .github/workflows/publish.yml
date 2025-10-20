@@ -39,6 +39,7 @@ jobs:
       - name: Debug env
         run: |
           echo "USERNAME_GITHUB=$USERNAME_GITHUB"
+          echo "TOKEN_GITHUB=${TOKEN_GITHUB:0:4}***"
 
       - name: Publish to GitHub Packages
         env:
