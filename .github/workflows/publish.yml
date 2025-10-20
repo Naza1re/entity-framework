@@ -8,6 +8,9 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
+    env: # вот здесь
+        USERNAME_GITHUB: ${{ github.actor }}
+        TOKEN_GITHUB: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout repository
