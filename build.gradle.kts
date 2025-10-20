@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.kotlin"
-version = "0.0.1" // без SNAPSHOT, чтобы GitHub Packages не ругался
+version = "0.0.2" // без SNAPSHOT, чтобы GitHub Packages не ругался
 description = "entity-framework"
 
 java {
