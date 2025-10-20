@@ -4,5 +4,6 @@ enum class CustomFieldType {
     STRING,
     NUMBER,
     DATE,
-    BOOLEAN
+    BOOLEAN,
+    REFERENCE,
 }
