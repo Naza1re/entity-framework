@@ -1,6 +1,5 @@
 package com.kotlin.entityframework.config
 
-
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.domain.EntityScan
 import org.springframework.context.annotation.ComponentScan

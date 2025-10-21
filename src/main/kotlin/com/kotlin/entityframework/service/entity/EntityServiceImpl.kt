@@ -77,7 +77,7 @@ class EntityServiceImpl (
 
     private fun getEntityOrThrow(number: String ): Entity {
         return repository.findByNumber(number)
-                ?: throw EntityNotFoundException(number)
+                ?: throw EntityNotFoundException("Entity with number '$number' not found")
     }
 
     private fun validateCustomFields(params: Map<String, Any>, entityType: EntityType) {
