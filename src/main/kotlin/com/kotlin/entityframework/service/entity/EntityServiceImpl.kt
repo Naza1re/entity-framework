@@ -17,6 +17,7 @@ import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.EntityFieldConstants
 import com.kotlin.entityframework.repository.specification.EntityFieldLikeSpecification
 import com.kotlin.entityframework.repository.specification.EntityPropertiesSpecifications
+import com.kotlin.entityframework.repository.specification.SpecificationCreator
 import com.kotlin.entityframework.service.CustomFieldService
 import com.kotlin.entityframework.service.EntityService
 import com.kotlin.entityframework.service.EntityTypeService
@@ -43,9 +44,7 @@ class EntityServiceImpl (
     override fun search(qlSearchRequest: QlSearchRequest): List<EntityResponse> {
 
         val pageRequest = PageRequest.of(qlSearchRequest.page, qlSearchRequest.pageSize)
-        val expression = QlParser.parse(qlSearchRequest.query)
-        val filters = QlToFilters.toMap(expression)
-        val specification = EntityPropertiesSpecifications.byProperties(filters)
+        val specification = SpecificationCreator.entitySpecificationCreate(qlSearchRequest.query)
 
         val entityList = repository.findAll(specification, pageRequest)
         return entityMapper.toEntityListAfterQlSearch(entityList.content)

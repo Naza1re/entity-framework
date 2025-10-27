@@ -2,10 +2,11 @@ package com.kotlin.entityframework.service.export
 
 import com.kotlin.entityframework.config.EntityImportProperties
 import com.kotlin.entityframework.dto.entity.request.ExportRequest
-import com.kotlin.entityframework.model.entity.Entity
 import com.kotlin.entityframework.repository.entity.EntityRepository
+import com.kotlin.entityframework.repository.specification.SpecificationCreator
 import com.kotlin.entityframework.service.ExportService
 import org.apache.poi.xssf.usermodel.XSSFWorkbook
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import java.io.ByteArrayOutputStream
 
@@ -20,12 +21,23 @@ class EntityExportServiceImpl(
 
         val headers = importProperties.columns.map { it.header ?: it.jsonKey ?: "" }
 
-        val headerRow = sheet.createRow(0)
-        headers.forEachIndexed { index, header ->
-            headerRow.createCell(index).setCellValue(header)
+        val boldFont = workbook.createFont().apply {
+            bold = true
+        }
+        val boldStyle = workbook.createCellStyle().apply {
+            setFont(boldFont)
         }
 
-        val entities: List<Entity> = entityRepository.findAll()
+        val headerRow = sheet.createRow(0)
+        headers.forEachIndexed { index, header ->
+            val cell =  headerRow.createCell(index)
+            cell.cellStyle = boldStyle
+            cell.setCellValue(header)
+        }
+        val pageRequest = PageRequest.of(exportRequest.page, exportRequest.pageSize)
+        val specification = SpecificationCreator.entitySpecificationCreate(exportRequest.query)
+
+        val entities = entityRepository.findAll(specification, pageRequest)
 
         entities.forEachIndexed { rowIndex, entity ->
             val row = sheet.createRow(rowIndex + 1)
