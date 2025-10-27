@@ -17,9 +17,12 @@ class EntityExportServiceImpl(
     private val entityRepository: EntityRepository,
     private val fieldProviders: List<FieldProvider>,
 ): ExportService {
+
+    private val ENTITIES = "Entities"
+
     override fun exportEntities(exportRequest: ExportRequest): ByteArray {
         val workbook = XSSFWorkbook()
-        val sheet = workbook.createSheet("Entities")
+        val sheet = workbook.createSheet(ENTITIES)
 
         val headers = importProperties.columns.map { it.header ?: it.jsonKey ?: "" }
 
