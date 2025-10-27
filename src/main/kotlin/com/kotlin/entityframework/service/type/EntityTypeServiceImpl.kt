@@ -45,13 +45,13 @@ class EntityTypeServiceImpl(
         return mapper.toEntityTypeResponse(savedEntityType)
     }
 
-    override fun getEntityTypesByRequest(searchRequest: EntityTypeRequestSearch): List<EntityTypeResponse>? {
+    override fun getEntityTypesByRequest(searchRequest: EntityTypeRequestSearch): List<EntityTypeResponse> {
         val pageRequest = PageRequest.of(searchRequest.page, searchRequest.size)
         val entityTypes = repository.findAll(pageRequest)
         return mapper.toEntityTypeResponseList(entityTypes.content)
     }
 
-    override fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse? {
+    override fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse {
         val entityType = getEntityTypeByCode(entityTypeCode)
         customFieldsService
             .deleteCustomFields(customFieldsService
@@ -92,7 +92,7 @@ class EntityTypeServiceImpl(
     private fun isValidEntityTypeCode(entityTypeCode: String) {
         val entityType = getNullableEntityType(entityTypeCode)
         if (entityType != null || entityTypeProperties.excludedCodes.contains(entityTypeCode)) {
-            throw EntityTypeCodeNotAlloyedException("Entity type with code $entityTypeCode not alloyed")
+            throw  EntityTypeCodeNotAlloyedException("Entity type with code '$entityTypeCode' not alloyed")
         }
     }
 

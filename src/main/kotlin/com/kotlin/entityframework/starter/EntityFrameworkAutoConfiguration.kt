@@ -1,5 +1,4 @@
-package com.kotlin.entityframework.config
-
+package com.kotlin.entityframework.starter
 
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.domain.EntityScan

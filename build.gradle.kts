@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.kotlin"
-version = "0.0.4"
+version = "0.0.6"
 description = "entity-framework"
 
 java {
@@ -42,6 +42,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok:1.18.32")
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.apache.poi:poi-ooxml:5.2.3")
 }
 
 kotlin {

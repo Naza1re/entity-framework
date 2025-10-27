@@ -7,10 +7,10 @@ import com.kotlin.entityframework.dto.type.response.EntityTypeResponse
 import com.kotlin.entityframework.model.type.EntityType
 
 interface EntityTypeService  {
-    fun getEntityTypeByCode(code:String) : EntityType?
-    fun getEntityType(code: String): EntityTypeResponse?
+    fun getEntityTypeByCode(code:String) : EntityType
+    fun getEntityType(code: String): EntityTypeResponse
     fun createEntityType(request: EntityTypeCreateRequest): EntityTypeResponse?
-    fun getEntityTypesByRequest(searchRequest: EntityTypeRequestSearch): List<EntityTypeResponse>?
-    fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse?
+    fun getEntityTypesByRequest(searchRequest: EntityTypeRequestSearch): List<EntityTypeResponse>
+    fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse
     fun deleteEntityType(entityTypeCode: String)
 }

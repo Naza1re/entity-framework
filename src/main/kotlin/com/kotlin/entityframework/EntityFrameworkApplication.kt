@@ -6,8 +6,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy
 
 @SpringBootApplication
 @EnableAspectJAutoProxy
-class AopApplication
+class EntityFrameworkApplication
 
 fun main(args: Array<String>) {
-    runApplication<AopApplication>(*args)
+    runApplication<EntityFrameworkApplication>(*args)
 }
