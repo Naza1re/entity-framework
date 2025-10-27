@@ -32,4 +32,8 @@ entity:
         jsonKey: "surname"
       - header: "Тип"
         json-key: "type"
+      - header: "Создан"
+        json-key: "createdAt"
+      - header: "Обновлен"
+        json-key: "updatedAt"
 

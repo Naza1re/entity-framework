@@ -26,6 +26,9 @@ data class Entity(
     @Column(name = "updated_at")
     var updatedAt: LocalDateTime,
 
+    @Column(name = "description")
+    var description: String,
+
     @Type(JsonType::class)
     @Column(columnDefinition = "jsonb")
     var properties: Map<String, Any>? = null,

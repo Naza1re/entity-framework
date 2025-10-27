@@ -2,6 +2,7 @@ package com.kotlin.entityframework.service.export
 
 import com.kotlin.entityframework.config.EntityImportProperties
 import com.kotlin.entityframework.dto.entity.request.ExportRequest
+import com.kotlin.entityframework.export.FieldProvider
 import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.SpecificationCreator
 import com.kotlin.entityframework.service.ExportService
@@ -13,11 +14,15 @@ import java.io.ByteArrayOutputStream
 @Service
 class EntityExportServiceImpl(
     private val importProperties: EntityImportProperties,
-    private val entityRepository: EntityRepository
+    private val entityRepository: EntityRepository,
+    private val fieldProviders: List<FieldProvider>,
 ): ExportService {
+
+    private val ENTITIES = "Entities"
+
     override fun exportEntities(exportRequest: ExportRequest): ByteArray {
         val workbook = XSSFWorkbook()
-        val sheet = workbook.createSheet("Entities")
+        val sheet = workbook.createSheet(ENTITIES)
 
         val headers = importProperties.columns.map { it.header ?: it.jsonKey ?: "" }
 
@@ -43,7 +48,14 @@ class EntityExportServiceImpl(
             val row = sheet.createRow(rowIndex + 1)
 
             importProperties.columns.forEachIndexed { colIndex, column ->
-                val value = entity.properties?.get(column.jsonKey) ?: ""
+
+                val value = fieldProviders
+                    .firstNotNullOfOrNull { provider ->
+                        if (provider.match(column.jsonKey.toString())) {
+                            provider.getValue(entity)
+                        } else null
+                    } ?: entity.properties?.get(column.jsonKey) ?: ""
+
                 row.createCell(colIndex).setCellValue(value.toString())
             }
         }
