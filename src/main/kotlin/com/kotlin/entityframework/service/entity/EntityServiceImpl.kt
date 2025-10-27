@@ -7,6 +7,7 @@ import com.kotlin.entityframework.dto.entity.search.request.QlSearchRequest
 import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
 import com.kotlin.entityframework.exception.EntityNotFoundException
 import com.kotlin.entityframework.exception.EntityTypeNotContainsSuchCustomFieldException
+import com.kotlin.entityframework.exception.MissingRequiredCustomFieldException
 import com.kotlin.entityframework.exception.NotAlloyedValueException
 import com.kotlin.entityframework.mapper.EntityMapper
 import com.kotlin.entityframework.model.entity.Entity
@@ -84,8 +85,19 @@ class EntityServiceImpl (
     private fun validateCustomFields(params: Map<String, Any>, entityType: EntityType) {
         val listOfEntityTypeFields = entityType.customFields
         val customFieldCodes = listOfEntityTypeFields.map {
-                customField -> customField.customField.code
+            customField -> customField.customField.code
         }
+
+        val requiredCustomFieldsCodes = listOfEntityTypeFields
+            .filter { it.required }
+            .map { it.customField.code }
+
+        for (requiredCode in requiredCustomFieldsCodes) {
+            if (!params.containsKey(requiredCode)) {
+                throw MissingRequiredCustomFieldException("Value for custom code '$requiredCode' is required")
+            }
+        }
+
         for (key in params.keys) {
             if (!customFieldCodes.contains(key)) {
                 throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")

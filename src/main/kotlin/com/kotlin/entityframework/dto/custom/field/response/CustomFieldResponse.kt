@@ -7,5 +7,6 @@ import com.kotlin.entityframework.model.custom.field.CustomFieldType
 data class CustomFieldResponse @JsonCreator constructor(
     @JsonProperty("id") val id: Long,
     @JsonProperty("code") val code: String,
-    @JsonProperty("type") val type: CustomFieldType
+    @JsonProperty("type") val type: CustomFieldType,
+    @JsonProperty("required") val required: Boolean
 )
