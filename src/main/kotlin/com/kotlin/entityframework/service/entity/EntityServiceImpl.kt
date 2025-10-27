@@ -62,6 +62,8 @@ class EntityServiceImpl (
                 entityType = entityType,
                 name = createRequest.name,
                 updatedAt = LocalDateTime.now(),
+                description = createRequest.description,
+
         )
         val savedEntity = repository.save(entityToSave)
         return entityMapper.toEntityResponse(savedEntity)

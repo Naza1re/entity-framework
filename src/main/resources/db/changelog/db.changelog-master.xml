@@ -37,4 +37,9 @@
                  splitStatements="false"/>
     </changeSet>
 
+    <changeSet author="NBachishche" id="007-add-description-field-to-entity">
+        <sqlFile path="migrations/schema/add-description-property-to-enttity.sql"
+                 splitStatements="false"/>
+    </changeSet>
+
 </databaseChangeLog>
