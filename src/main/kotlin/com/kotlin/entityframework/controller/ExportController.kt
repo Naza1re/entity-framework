@@ -3,7 +3,7 @@ package com.kotlin.entityframework.controller
 import com.kotlin.entityframework.dto.entity.request.ExportRequest
 import com.kotlin.entityframework.service.ExportService
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -14,9 +14,11 @@ class ExportController(
     private val exportService: ExportService
 ) {
 
-
-    @GetMapping("/entities")
+    @PostMapping("/entities")
     fun export(@RequestBody exportRequest: ExportRequest) : ResponseEntity<ByteArray> {
-        return ResponseEntity.ok(exportService.exportEntities(exportRequest))
+        val excelData = exportService.exportEntities(exportRequest)
+        return ResponseEntity.ok()
+            .header("Content-Disposition", "attachment; filename=entities.xlsx")
+            .body(excelData)
     }
 }

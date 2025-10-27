@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository
 interface EntityRepository : JpaRepository<Entity, Long>, JpaSpecificationExecutor<Entity> {
 
     fun findByNumber(number: String): Entity?
-    fun finByCode(code: String): Entity?
 }

@@ -19,7 +19,7 @@ import com.kotlin.entityframework.repository.specification.EntityFieldLikeSpecif
 import com.kotlin.entityframework.repository.specification.EntityPropertiesSpecifications
 import com.kotlin.entityframework.service.CustomFieldService
 import com.kotlin.entityframework.service.EntityService
-import com.kotlin.entityframework.service.type.EntityTypeServiceImpl
+import com.kotlin.entityframework.service.EntityTypeService
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -29,7 +29,7 @@ import java.util.*
 @Service
 class EntityServiceImpl (
     private val repository : EntityRepository,
-    private val entityTypeServiceImpl : EntityTypeServiceImpl,
+    private val entityTypeService : EntityTypeService,
     private val entityMapper: EntityMapper,
     private val customFieldService: CustomFieldService
 ) : EntityService {
@@ -54,7 +54,7 @@ class EntityServiceImpl (
     @Transactional
     override fun createEntity(createRequest: CreateRequest): EntityResponse {
         val entityTypeCode = createRequest.entityTypeCode
-        val entityType = entityTypeServiceImpl.getEntityTypeByCode(entityTypeCode)
+        val entityType = entityTypeService.getEntityTypeByCode(entityTypeCode)
             validateCustomFields(createRequest.params, entityType)
         val entityToSave = Entity(
                 id = 0,
@@ -118,7 +118,7 @@ class EntityServiceImpl (
     override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse {
         val entity = getEntityOrThrow(number)
 
-        val entityTypeByCode = entityTypeServiceImpl.getEntityTypeByCode(entity.entityType.code)
+        val entityTypeByCode = entityTypeService.getEntityTypeByCode(entity.entityType.code)
 
         validateCustomFields(updateRequest.params, entityTypeByCode)
 

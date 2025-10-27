@@ -24,3 +24,12 @@ spring:
 entity:
   type:
     excluded-codes: ${ENTITY_TYPE_EXCLUDED_CODES:restrict}
+  import:
+    columns:
+      - header: "Имя"
+        jsonKey: "name"
+      - header: "Фамилия"
+        jsonKey: "surname"
+      - header: "Тип"
+        json-key: "type"
+
