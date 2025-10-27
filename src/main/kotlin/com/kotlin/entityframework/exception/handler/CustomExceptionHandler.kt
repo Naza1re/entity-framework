@@ -21,7 +21,8 @@ class CustomExceptionHandler {
 
     @ExceptionHandler(EntityTypeCodeNotAlloyedException::class,
         EntityTypeAlreadyExistException::class,
-        NotAlloyedValueException::class,)
+        NotAlloyedValueException::class,
+        MissingRequiredCustomFieldException::class)
     fun handleConflictException(conflictException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
         return ResponseEntity<ApplicationExceptionObject>(
             ApplicationExceptionObject(conflictException.message!!, 409), HttpStatus.CONFLICT

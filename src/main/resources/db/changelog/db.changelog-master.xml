@@ -37,4 +37,9 @@
                  splitStatements="false"/>
     </changeSet>
 
+    <changeSet author="NBachishche" id="007-add-required-property-for-custom-filed">
+        <sqlFile path="migrations/schema/add-required-property-for-custom-fields.sql"
+                splitStatements="false"/>
+    </changeSet>
+
 </databaseChangeLog>

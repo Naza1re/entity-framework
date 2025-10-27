@@ -14,6 +14,9 @@ class CustomFieldEntityType(
     val customField: CustomField,
 
     @ManyToOne(fetch = FetchType.LAZY)
-    val entityType: EntityType
+    val entityType: EntityType,
+
+    @Column(name = "required")
+    val required: Boolean
 
 )
