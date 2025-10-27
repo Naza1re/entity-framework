@@ -30,7 +30,8 @@ abstract class CustomFieldMapper {
             val customFieldResponse = CustomFieldResponse(
                 customField.id,
                 customField.customField.code,
-                customField.customField.metadata!!.type)
+                customField.customField.metadata!!.type,
+                customField.required)
             list.add(customFieldResponse)
         }
         return list

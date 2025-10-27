@@ -1,0 +1,2 @@
+ALTER TABLE entity
+    ADD COLUMN IF NOT EXISTS description VARCHAR

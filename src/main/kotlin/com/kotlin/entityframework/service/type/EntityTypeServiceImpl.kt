@@ -117,7 +117,8 @@ class EntityTypeServiceImpl(
             CustomFieldEntityType(
                 id = 0,
                 customField = customField,
-                entityType = entityType
+                entityType = entityType,
+                required = cfr.required,
             )
         }
     }

@@ -36,5 +36,15 @@
         <sqlFile path="migrations/schema/add-create-date-and-update-date-to-entity.sql"
                  splitStatements="false"/>
     </changeSet>
+  
+    <changeSet author="NBachishche" id="007-add-required-property-for-custom-filed">
+        <sqlFile path="migrations/schema/add-required-property-for-custom-fields.sql"
+                splitStatements="false"/>
+    </changeSet>
+    
+    <changeSet author="NBachishche" id="008-add-description-field-to-entity">
+        <sqlFile path="migrations/schema/add-description-property-to-enttity.sql"
+                 splitStatements="false"/>
+    </changeSet>
 
 </databaseChangeLog>
