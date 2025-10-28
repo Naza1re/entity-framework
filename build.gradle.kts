@@ -43,6 +43,7 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.32")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.apache.poi:poi-ooxml:5.2.3")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
 }
 
 kotlin {
