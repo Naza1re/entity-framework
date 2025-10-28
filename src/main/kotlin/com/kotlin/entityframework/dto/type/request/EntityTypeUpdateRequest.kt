@@ -7,6 +7,6 @@ import com.kotlin.entityframework.dto.custom.field.request.CustomFieldRequest
 data class EntityTypeUpdateRequest @JsonCreator constructor(
     @JsonProperty("name") val name: String,
     @JsonProperty("description") val description: String,
-    @JsonProperty("customFieldsToDelete") val customFieldsToDelete: List<String>,
-    @JsonProperty("newCustomFields") val newCustomFields: List<CustomFieldRequest>
+    @JsonProperty("customFieldsToDelete") val customFieldsToDelete: List<String>? = emptyList(),
+    @JsonProperty("newCustomFields") val newCustomFields: List<CustomFieldRequest>? = emptyList(),
 )

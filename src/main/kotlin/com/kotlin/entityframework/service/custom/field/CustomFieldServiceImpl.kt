@@ -6,6 +6,7 @@ import com.kotlin.entityframework.model.custom.field.CustomField
 import com.kotlin.entityframework.repository.custom.field.CustomFieldRepository
 import com.kotlin.entityframework.service.CustomFieldService
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class CustomFieldServiceImpl(
@@ -15,13 +16,17 @@ class CustomFieldServiceImpl(
         TODO("Not yet implemented")
     }
 
+    @Transactional
     override fun deleteCustomFields(customFieldCodes: List<String>) {
         repository.deleteByCodeIn(customFieldCodes)
     }
 
+    @Transactional(readOnly = true)
     override fun getCustomFieldsByCodes(customFieldCodes: List<String>): List<CustomField> {
         return repository.findByCodeIn(customFieldCodes)
     }
+
+    @Transactional(readOnly = true)
     override fun getCustomFieldByCode(code : String) : CustomField {
         return repository.findByCode(code) ?: throw CustomFieldNotFoundException("Custom field with code $code not found")
     }

@@ -20,6 +20,7 @@ import com.kotlin.entityframework.service.CustomFieldService
 import com.kotlin.entityframework.service.EntityTypeService
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class EntityTypeServiceImpl(
@@ -30,6 +31,7 @@ class EntityTypeServiceImpl(
     private val customFieldsService: CustomFieldService
 ) : EntityTypeService {
 
+    @Transactional
     override fun createEntityType(request: EntityTypeCreateRequest): EntityTypeResponse? {
         isValidEntityTypeCode(request.code)
         val entityType = EntityType(
@@ -45,22 +47,27 @@ class EntityTypeServiceImpl(
         return mapper.toEntityTypeResponse(savedEntityType)
     }
 
+    @Transactional(readOnly = true)
     override fun getEntityTypesByRequest(searchRequest: EntityTypeRequestSearch): List<EntityTypeResponse> {
         val pageRequest = PageRequest.of(searchRequest.page, searchRequest.size)
         val entityTypes = repository.findAll(pageRequest)
         return mapper.toEntityTypeResponseList(entityTypes.content)
     }
 
+    @Transactional
     override fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse {
         val entityType = getEntityTypeByCode(entityTypeCode)
-        customFieldsService
-            .deleteCustomFields(customFieldsService
-                .getCustomFieldsByCodes(updateRequest
-                    .customFieldsToDelete).map { it.code })
+        updateRequest.customFieldsToDelete?.let { codesToDelete ->
+            val codes = customFieldsService.getCustomFieldsByCodes(codesToDelete)
+                .map { it.code }
+            customFieldsService.deleteCustomFields(codes)
+        }
 
-        entityType
-            .customFields
-            .addAll(createCustomFieldsEntityTypeLinks(updateRequest.newCustomFields, entityType))
+        updateRequest.newCustomFields?.let { newFields ->
+            entityType.customFields.addAll(
+                createCustomFieldsEntityTypeLinks(newFields, entityType)
+            )
+        }
 
         entityType.name = updateRequest.name
         entityType.description = updateRequest.description
@@ -69,16 +76,19 @@ class EntityTypeServiceImpl(
 
     }
 
+    @Transactional
     override fun deleteEntityType(entityTypeCode: String) {
         val entityType = getEntityTypeByCode(entityTypeCode)
         repository.delete(entityType)
     }
 
+    @Transactional(readOnly = true)
     override fun getEntityTypeByCode(code: String) : EntityType {
         return repository.findByCode(code)
             ?: throw EntityTypeNotFoundException("Entity type by code : $code not found")
     }
 
+    @Transactional(readOnly = true)
     override fun getEntityType(code: String) : EntityTypeResponse {
         val entityType = repository.findByCode(code)
             ?: throw EntityTypeNotFoundException("Entity type by code : $code not found")
