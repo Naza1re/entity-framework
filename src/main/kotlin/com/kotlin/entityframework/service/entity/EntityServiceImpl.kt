@@ -133,11 +133,15 @@ class EntityServiceImpl (
 
         val entityTypeByCode = entityTypeService.getEntityTypeByCode(entity.entityType.code)
 
-        validateCustomFields(updateRequest.params, entityTypeByCode)
+        updateRequest.params?.let {
+            validateCustomFields(it, entityTypeByCode)
+        }
 
         entity.apply {
             name = updateRequest.name
-            properties = putElementsToEntity(updateRequest.params)
+            updateRequest.params?.let {
+                properties = putElementsToEntity(it)
+            }
             entityType = entityTypeByCode
             updatedAt = LocalDateTime.now()
         }
