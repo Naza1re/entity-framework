@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-publish:
     runs-on: ubuntu-latest
-    env: # вот здесь
+    env:
         USERNAME_GITHUB: ${{ github.actor }}
         TOKEN_GITHUB: ${{ secrets.TOKEN_GITHUB }}
 
@@ -21,9 +21,8 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-          server-id: github  # идентификатор для Maven credentials
-          settings-path: ${{ github.workspace }}  # куда положить settings.xml
-
+          server-id: github
+          settings-path: ${{ github.workspace }}
       - name: Cache Gradle packages
         uses: actions/cache@v3
         with:

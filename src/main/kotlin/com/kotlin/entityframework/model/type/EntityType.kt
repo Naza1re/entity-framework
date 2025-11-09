@@ -1,8 +1,15 @@
 package com.kotlin.entityframework.model.type
 
 import com.kotlin.entityframework.model.custom.field.CustomFieldEntityType
+import jakarta.persistence.Id
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Table
+import jakarta.persistence.Column
+import jakarta.persistence.FetchType
+import jakarta.persistence.CascadeType
+import jakarta.persistence.OneToMany
 import com.kotlin.entityframework.model.entity.Entity
-import jakarta.persistence.*
 
 @jakarta.persistence.Entity
 @Table(name = "entity_type")
