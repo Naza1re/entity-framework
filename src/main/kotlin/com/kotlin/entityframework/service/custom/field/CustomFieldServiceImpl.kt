@@ -14,6 +14,7 @@ class CustomFieldServiceImpl(
 ) : CustomFieldService {
     override fun createCustomFieldsToEntityType(customFieldsRequest: CustomFieldRequest): List<CustomField> {
         TODO("Not yet implemented")
+
     }
 
     @Transactional
