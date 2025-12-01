@@ -32,5 +32,4 @@ class CustomFieldServiceImpl(
         return repository.findByCode(code) ?: throw CustomFieldNotFoundException("Custom field with code $code not found")
     }
 
-
 }
