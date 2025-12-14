@@ -18,7 +18,9 @@ class EntityExportServiceImpl(
     private val fieldProviders: List<FieldProvider>,
 ): ExportService {
 
-    private val ENTITIES = "Entities"
+    companion object {
+        private const val ENTITIES = "Entities"
+    }
 
     override fun exportEntities(exportRequest: ExportRequest): ByteArray {
         val workbook = XSSFWorkbook()

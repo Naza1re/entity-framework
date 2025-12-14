@@ -12,12 +12,9 @@ import com.kotlin.entityframework.exception.NotAlloyedValueException
 import com.kotlin.entityframework.mapper.EntityMapper
 import com.kotlin.entityframework.model.entity.Entity
 import com.kotlin.entityframework.model.type.EntityType
-import com.kotlin.entityframework.ql.QlToFilters
-import com.kotlin.entityframework.ql.parser.QlParser
 import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.EntityFieldConstants
 import com.kotlin.entityframework.repository.specification.EntityFieldLikeSpecification
-import com.kotlin.entityframework.repository.specification.EntityPropertiesSpecifications
 import com.kotlin.entityframework.repository.specification.SpecificationCreator
 import com.kotlin.entityframework.service.CustomFieldService
 import com.kotlin.entityframework.service.EntityService
@@ -37,7 +34,7 @@ class EntityServiceImpl (
 ) : EntityService {
 
     @Transactional(readOnly = true)
-    override fun getByNumber(number: String): EntityResponse? {
+    override fun getByNumber(number: String): EntityResponse {
         return entityMapper.toEntityResponse(getEntityOrThrow(number))
     }
 
@@ -139,6 +136,9 @@ class EntityServiceImpl (
 
         entity.apply {
             name = updateRequest.name
+            updateRequest.description?. let {
+                description = updateRequest.description
+            }
             updateRequest.params?.let {
                 properties = putElementsToEntity(it)
             }

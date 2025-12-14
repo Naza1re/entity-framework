@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class SearchResponse @JsonCreator constructor(
-    @JsonProperty("entityList") val entityList: List<EntityResponse>,
-    @JsonProperty("params") val params: Map<String, String>
+    @JsonProperty("entityList") val entityList: List<EntityResponse> = emptyList(),
+    @JsonProperty("params") val params: Map<String, String> = emptyMap()
 )

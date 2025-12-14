@@ -10,7 +10,7 @@ interface EntityService {
     /*
      * Get entity by number
     */
-    fun getByNumber(number: String): EntityResponse?
+    fun getByNumber(number: String): EntityResponse
 
     /*
     * Search entity my ml search('attribute' = '123' and 'attribute2' = 'support')
@@ -30,7 +30,7 @@ interface EntityService {
     /*
     * Update entity by entity update request
     */
-    fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse?
+    fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse
 
     /*
     * Find entities by keyword with pagination

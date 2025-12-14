@@ -14,6 +14,7 @@ class CustomFieldServiceImpl(
 ) : CustomFieldService {
     override fun createCustomFieldsToEntityType(customFieldsRequest: CustomFieldRequest): List<CustomField> {
         TODO("Not yet implemented")
+
     }
 
     @Transactional
@@ -30,6 +31,5 @@ class CustomFieldServiceImpl(
     override fun getCustomFieldByCode(code : String) : CustomField {
         return repository.findByCode(code) ?: throw CustomFieldNotFoundException("Custom field with code $code not found")
     }
-
 
 }

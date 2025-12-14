@@ -32,7 +32,7 @@ class EntityTypeServiceImpl(
 ) : EntityTypeService {
 
     @Transactional
-    override fun createEntityType(request: EntityTypeCreateRequest): EntityTypeResponse? {
+    override fun createEntityType(request: EntityTypeCreateRequest): EntityTypeResponse {
         isValidEntityTypeCode(request.code)
         val entityType = EntityType(
             name = request.name,
@@ -69,7 +69,9 @@ class EntityTypeServiceImpl(
             )
         }
 
-        entityType.name = updateRequest.name
+        updateRequest.name?.let {
+            entityType.name = updateRequest.name
+        }
         entityType.description = updateRequest.description
 
         return mapper.toEntityTypeResponse(repository.save(entityType))
