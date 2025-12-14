@@ -136,6 +136,9 @@ class EntityServiceImpl (
 
         entity.apply {
             name = updateRequest.name
+            updateRequest.description?. let {
+                description = updateRequest.description
+            }
             updateRequest.params?.let {
                 properties = putElementsToEntity(it)
             }

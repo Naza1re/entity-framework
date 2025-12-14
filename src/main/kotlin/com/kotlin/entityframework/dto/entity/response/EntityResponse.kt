@@ -9,5 +9,5 @@ data class EntityResponse @JsonCreator constructor(
     @JsonProperty("entityTypeCode") val entityTypeCode: String,
     @JsonProperty("name") val name: String,
     @JsonProperty("number") val number: String,
-    @JsonProperty("customFieldsValue") val customFieldsValue: List<CustomFieldValueResponse>
+    @JsonProperty("customFieldsValue") val customFieldsValue: List<CustomFieldValueResponse> = emptyList()
 )

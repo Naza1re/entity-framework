@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class CustomFieldRequest @JsonCreator constructor(
-    @JsonProperty("code") val code: String = "",
-    @JsonProperty("type") val type: String = "",
+    @JsonProperty("code") val code: String,
+    @JsonProperty("type") val type: String,
     @JsonProperty("required") val required: Boolean = false,
 )

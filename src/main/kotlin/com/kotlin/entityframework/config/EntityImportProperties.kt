@@ -10,7 +10,7 @@ class EntityImportProperties {
     var columns: List<ColumnMapping> = emptyList()
 
     data class ColumnMapping(
-        var header: String? = "",
-        var jsonKey: String? = ""
+        var header: String = "",
+        var jsonKey: String = ""
     )
 }
