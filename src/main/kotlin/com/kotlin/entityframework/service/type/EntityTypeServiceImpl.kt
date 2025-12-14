@@ -69,7 +69,9 @@ class EntityTypeServiceImpl(
             )
         }
 
-        entityType.name = updateRequest.name
+        updateRequest.name?.let {
+            entityType.name = updateRequest.name
+        }
         entityType.description = updateRequest.description
 
         return mapper.toEntityTypeResponse(repository.save(entityType))

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class UpdateRequest @JsonCreator constructor(
-    @JsonProperty("name") val name: String,
-    @JsonProperty("description") val description: String,
+    @JsonProperty("name") val name: String = "",
+    @JsonProperty("description") val description: String?,
     @JsonProperty("params") val params: Map<String, Any>?,
-    @JsonProperty("customFieldsCodesToDelete") val customFieldsCodesToDelete: Set<String>?
+    @JsonProperty("customFieldsCodesToDelete") val customFieldsCodesToDelete: Set<String> = emptySet()
 )

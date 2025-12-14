@@ -8,6 +8,6 @@ data class EntityTypeResponse @JsonCreator constructor(
     @JsonProperty("id") val id: Long,
     @JsonProperty("code") val code: String,
     @JsonProperty("name") val name: String,
-    @JsonProperty("description") val description: String,
-    @JsonProperty("customFields") val customFields: List<CustomFieldResponse>
+    @JsonProperty("description") val description: String = "",
+    @JsonProperty("customFields") val customFields: List<CustomFieldResponse> = emptyList(),
 )

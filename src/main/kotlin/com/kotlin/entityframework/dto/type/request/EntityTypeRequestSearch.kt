@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class EntityTypeRequestSearch @JsonCreator constructor(
-    @JsonProperty("page") val page: Int,
-    @JsonProperty("size") val size: Int,
-    @JsonProperty("prefix") val prefix: String
+    @JsonProperty("page") val page: Int = 0,
+    @JsonProperty("size") val size: Int = 20,
+    @JsonProperty("prefix") val prefix: String = ""
 )

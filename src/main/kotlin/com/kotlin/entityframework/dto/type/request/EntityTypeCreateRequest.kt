@@ -8,5 +8,5 @@ data class EntityTypeCreateRequest @JsonCreator constructor(
     @JsonProperty("code") val code: String,
     @JsonProperty("name") val name: String,
     @JsonProperty("description") val description: String,
-    @JsonProperty("customFields") val customFields: List<CustomFieldRequest>
+    @JsonProperty("customFields") val customFields: List<CustomFieldRequest> = emptyList()
 )
