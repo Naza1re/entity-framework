@@ -1,11 +1,11 @@
 plugins {
-    kotlin("jvm") version "1.9.25"
-    kotlin("plugin.spring") version "1.9.25"
-    kotlin("plugin.jpa") version "1.9.25"
-    kotlin("kapt") version "1.9.25"
-    id("java-library")
-    id("maven-publish")
-    id("io.spring.dependency-management") version "1.1.7"
+        kotlin("jvm") version "1.9.25"
+        kotlin("plugin.spring") version "1.9.25"
+        kotlin("plugin.jpa") version "1.9.25"
+        kotlin("kapt") version "1.9.25"
+        id("java-library")
+        id("maven-publish")
+        id("io.spring.dependency-management") version "1.1.7"
 }
 
 group = "com.kotlin"
@@ -18,11 +18,11 @@ java {
     }
 }
 
-tasks.jar {
-    archiveBaseName.set("entity-framework")
-    archiveVersion.set(version.toString())
-    archiveClassifier.set("")
-}
+    tasks.jar {
+        archiveBaseName.set("entity-framework")
+        archiveVersion.set(version.toString())
+        archiveClassifier.set("")
+    }
 
 repositories {
     mavenCentral()
