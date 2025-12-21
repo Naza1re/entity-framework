@@ -5,6 +5,7 @@ import com.kotlin.entityframework.dto.entity.request.UpdateRequest
 import com.kotlin.entityframework.dto.entity.response.EntityResponse
 import com.kotlin.entityframework.dto.entity.search.request.QlSearchRequest
 import com.kotlin.entityframework.dto.entity.search.request.SearchRequest
+import com.kotlin.entityframework.model.entity.Entity
 
 interface EntityService {
     /*
@@ -31,6 +32,11 @@ interface EntityService {
     * Update entity by entity update request
     */
     fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse
+
+    /*
+    * Update entity by properties throw the Map<String,Any>
+     */
+    fun updateEntity(entity: Entity, properties: Map<String, Any>)
 
     /*
     * Find entities by keyword with pagination

@@ -52,11 +52,11 @@ class EntityServiceImpl (
     override fun createEntity(createRequest: CreateRequest): EntityResponse {
         val entityTypeCode = createRequest.entityTypeCode
         val entityType = entityTypeService.getEntityTypeByCode(entityTypeCode)
-            validateCustomFields(createRequest.params, entityType)
+        validateCustomFields(createRequest.params, entityType)
         val entityToSave = Entity(
-                id = 0,
+                id = null,
                 number = UUID.randomUUID().toString(),
-                properties = putElementsToEntity(createRequest.params),
+                properties = createRequest.params,
                 entityType = entityType,
                 name = createRequest.name,
                 updatedAt = LocalDateTime.now(),
@@ -116,14 +116,6 @@ class EntityServiceImpl (
         }
     }
 
-    private fun putElementsToEntity(params: Map<String, Any>) : Map<String, Any> {
-        val resultParams = HashMap<String, Any>()
-        for ((key, value) in params) {
-            resultParams[key] = value
-        }
-        return resultParams
-    }
-
     @Transactional
     override fun updateEntity(number: String, updateRequest: UpdateRequest): EntityResponse {
         val entity = getEntityOrThrow(number)
@@ -139,8 +131,9 @@ class EntityServiceImpl (
             updateRequest.description?. let {
                 description = updateRequest.description
             }
+
             updateRequest.params?.let {
-                properties = putElementsToEntity(it)
+               putElementsToEntity(entity, it)
             }
             entityType = entityTypeByCode
             updatedAt = LocalDateTime.now()
@@ -148,6 +141,22 @@ class EntityServiceImpl (
 
         val updatedEntity = repository.save(entity)
         return entityMapper.toEntityResponse(updatedEntity)
+    }
+
+    private fun putElementsToEntity(entity: Entity, newProperties: Map<String, Any>){
+        val propertiesToSave = HashMap<String, Any>()
+        entity.properties?.let {
+            propertiesToSave += it
+        }
+        propertiesToSave.putAll(newProperties)
+        entity.properties = propertiesToSave
+    }
+
+    @Transactional
+    override fun updateEntity(entity: Entity, properties: Map<String, Any>) {
+        val entityType = entity.entityType
+        validateCustomFields(properties, entityType)
+        putElementsToEntity(entity, properties)
     }
 
     @Transactional(readOnly = true)

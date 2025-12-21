@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 data class Entity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    val id: Long,
+    val id: Long?,
 
     @Column(name = "number")
     val number: String,
