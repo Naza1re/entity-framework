@@ -9,4 +9,5 @@ interface CustomFieldService {
     fun deleteCustomFields(customFieldNames: List<String>)
     fun getCustomFieldsByNames(customFieldNames: List<String>) : List<CustomField>
     fun getCustomFieldByName(name: String) : CustomField
+    fun getCustomFieldByNameAndEntityTypeCode(name : String, entityTypeCode : String) : CustomField
 }

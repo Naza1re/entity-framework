@@ -3,6 +3,7 @@ package com.kotlin.entityframework.service.custom.field
 import com.kotlin.entityframework.dto.custom.field.request.CustomFieldRequest
 import com.kotlin.entityframework.exception.CustomFieldNotFoundException
 import com.kotlin.entityframework.model.custom.field.CustomField
+import com.kotlin.entityframework.model.custom.field.CustomFieldEntityType
 import com.kotlin.entityframework.repository.custom.field.CustomFieldRepository
 import com.kotlin.entityframework.service.CustomFieldService
 import org.springframework.stereotype.Service
@@ -31,5 +32,12 @@ class CustomFieldServiceImpl(
     override fun getCustomFieldByName(name : String) : CustomField {
         return repository.findByName(name) ?: throw CustomFieldNotFoundException("Custom field with name $name not found")
     }
+
+    @Transactional(readOnly = true)
+    override fun getCustomFieldByNameAndEntityTypeCode(name : String, entityTypeCode : String) : CustomField {
+        return repository.findByNameAndEntityTypeCode(name, entityTypeCode) ?: throw CustomFieldNotFoundException("Custom field with name $name not found")
+    }
+
+
 
 }

@@ -100,7 +100,7 @@ class EntityServiceImpl (
                 throw EntityTypeNotContainsSuchCustomFieldException("Field with name '$key' not allowed for this entityType")
             }
             val value = params[key]
-            val customField = customFieldService.getCustomFieldByName(key)
+            val customField = customFieldService.getCustomFieldByNameAndEntityTypeCode(key, entityType.code)
             val max = customField.max
             val min = customField.min
             when (value) {

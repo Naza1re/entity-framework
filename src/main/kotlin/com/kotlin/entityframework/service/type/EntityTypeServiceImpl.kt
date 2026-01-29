@@ -113,7 +113,7 @@ class EntityTypeServiceImpl(
             : List<CustomFieldEntityType> {
         return customFieldsRequest.map { cfr ->
 
-            val customField = customFieldRepository.findByName(cfr.name) ?: run {
+            val customField = customFieldRepository.findByNameAndEntityTypeCode(cfr.name, entityType.code) ?: run {
                 val newField = CustomField(
                     code = UUID.randomUUID().toString(),
                     name = cfr.name,

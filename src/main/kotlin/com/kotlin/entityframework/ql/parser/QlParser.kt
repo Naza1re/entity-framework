@@ -12,7 +12,11 @@ object QlParser {
     }
 
     private fun tokenize(input: String): List<String> {
-        val regex = Regex("\\s*(and|or|like|=|>|'[^']*'|\\w+)\\s*", RegexOption.IGNORE_CASE)
+        // Добавлен паттерн для UUID: [0-9a-fA-F]{8}-...
+        val regex = Regex(
+            "\\s*(and|or|like|=|>|'[^']*'|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|\\w+)\\s*",
+            RegexOption.IGNORE_CASE
+        )
         return regex.findAll(input).map { it.groupValues[1].trim() }.toList()
     }
 
