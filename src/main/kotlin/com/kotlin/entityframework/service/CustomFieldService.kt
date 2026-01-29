@@ -6,7 +6,7 @@ import com.kotlin.entityframework.model.custom.field.CustomField
 interface CustomFieldService {
 
     fun createCustomFieldsToEntityType(customFieldsRequest: CustomFieldRequest) : List<CustomField>
-    fun deleteCustomFields(customFieldCodes: List<String>)
-    fun getCustomFieldsByCodes(customFieldCodes: List<String>) : List<CustomField>
-    fun getCustomFieldByCode(code: String) : CustomField
+    fun deleteCustomFields(customFieldNames: List<String>)
+    fun getCustomFieldsByNames(customFieldNames: List<String>) : List<CustomField>
+    fun getCustomFieldByName(name: String) : CustomField
 }

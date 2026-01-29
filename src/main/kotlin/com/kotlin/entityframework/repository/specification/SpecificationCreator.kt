@@ -9,7 +9,7 @@ object SpecificationCreator {
 
     fun entitySpecificationCreate(query: String): Specification<Entity> {
         val expression = QlParser.parse(query)
-        val filters = QlToFilters.toMap(expression)
-        return EntityPropertiesSpecifications.byProperties(filters)
+
+        return expression.toSpecification()
     }
 }

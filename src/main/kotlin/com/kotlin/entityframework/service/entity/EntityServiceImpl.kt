@@ -81,8 +81,8 @@ class EntityServiceImpl (
 
     private fun validateCustomFields(params: Map<String, Any>, entityType: EntityType) {
         val listOfEntityTypeFields = entityType.customFields
-        val customFieldCodes = listOfEntityTypeFields.map {
-            customField -> customField.customField.code
+        val customFieldNames = listOfEntityTypeFields.map {
+            customField -> customField.customField.name
         }
 
         val requiredCustomFieldsCodes = listOfEntityTypeFields
@@ -96,11 +96,11 @@ class EntityServiceImpl (
         }
 
         for (key in params.keys) {
-            if (!customFieldCodes.contains(key)) {
-                throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")
+            if (!customFieldNames.contains(key)) {
+                throw EntityTypeNotContainsSuchCustomFieldException("Field with name '$key' not allowed for this entityType")
             }
             val value = params[key]
-            val customField = customFieldService.getCustomFieldByCode(key)
+            val customField = customFieldService.getCustomFieldByName(key)
             val max = customField.max
             val min = customField.min
             when (value) {

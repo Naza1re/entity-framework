@@ -14,9 +14,8 @@ abstract class CustomFieldMapper {
         val list = mutableListOf<CustomFieldValueResponse>()
 
         for ((key, value) in properties) {
-            if (value is String) {
-                list.add(CustomFieldValueResponse(key, value))
-            }
+            list.add(CustomFieldValueResponse(key, value))
+
         }
         return list
     }
@@ -30,6 +29,7 @@ abstract class CustomFieldMapper {
             val customFieldResponse = CustomFieldResponse(
                 customField.id,
                 customField.customField.code,
+                customField.customField.name,
                 customField.customField.metadata!!.type,
                 customField.required)
             list.add(customFieldResponse)

@@ -19,6 +19,7 @@ data class CustomField(
     val id: Long = 0,
 
     @Column(name = "code") val code: String,
+    @Column(name = "name") val name: String,
     @Column(name = "min") val min: Int,
     @Column(name = "max") val max: Int,
 

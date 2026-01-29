@@ -18,18 +18,18 @@ class CustomFieldServiceImpl(
     }
 
     @Transactional
-    override fun deleteCustomFields(customFieldCodes: List<String>) {
-        repository.deleteByCodeIn(customFieldCodes)
+    override fun deleteCustomFields(customFieldNames: List<String>) {
+        repository.deleteByNameIn(customFieldNames)
     }
 
     @Transactional(readOnly = true)
-    override fun getCustomFieldsByCodes(customFieldCodes: List<String>): List<CustomField> {
-        return repository.findByCodeIn(customFieldCodes)
+    override fun getCustomFieldsByNames(customFieldNames: List<String>): List<CustomField> {
+        return repository.findByNameIn(customFieldNames)
     }
 
     @Transactional(readOnly = true)
-    override fun getCustomFieldByCode(code : String) : CustomField {
-        return repository.findByCode(code) ?: throw CustomFieldNotFoundException("Custom field with code $code not found")
+    override fun getCustomFieldByName(name : String) : CustomField {
+        return repository.findByName(name) ?: throw CustomFieldNotFoundException("Custom field with name $name not found")
     }
 
 }
