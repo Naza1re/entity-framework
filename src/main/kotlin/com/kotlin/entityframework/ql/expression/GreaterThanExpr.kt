@@ -20,34 +20,46 @@ data class GreaterThanExpr(
                 root.join<Any, Any>("entityType")
                     .join<Any, Any>("customFields")
                     .join<Any, Any>("customField")
-                    .apply {
-                    }
             } else null
+
             val fieldNameExpression = if (fieldKeyPath != null) {
-                fieldKeyPath.get("name")
+                fieldKeyPath.get<String>("name")
             } else {
                 cb.literal(field)
             }
-            val jsonExtract = cb.function(
+            val jsonElement = cb.function(
+                "jsonb_extract_path",
+                Any::class.java,
+                root.get<String>("properties"),
+                fieldNameExpression
+            )
+            val isNumberType = cb.equal(
+                cb.function("jsonb_typeof", String::class.java, jsonElement),
+                cb.literal("number")
+            )
+            val jsonExtractText = cb.function(
                 "jsonb_extract_path_text",
                 String::class.java,
                 root.get<String>("properties"),
                 fieldNameExpression
             )
+
             val numericPath = cb.function(
                 "to_number",
                 Double::class.javaObjectType,
-                jsonExtract,
+                jsonExtractText,
                 cb.literal("999999999D")
             )
-            val greaterThanPredicate = cb.greaterThan(numericPath, numericValue)
+            val safeGreaterThan = cb.and(isNumberType, cb.greaterThan(numericPath, numericValue))
+
             if (fieldKeyPath != null) {
-                cb.and(cb.equal(fieldKeyPath.get<String>("code"), field), greaterThanPredicate)
+                cb.and(cb.equal(fieldKeyPath.get<String>("code"), field), safeGreaterThan)
             } else {
-                greaterThanPredicate
+                safeGreaterThan
             }
         }
     }
+
 
 
 }
