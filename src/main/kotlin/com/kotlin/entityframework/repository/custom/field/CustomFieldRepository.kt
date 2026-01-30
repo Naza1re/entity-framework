@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository
 interface CustomFieldRepository : JpaRepository<CustomField, Long>, JpaSpecificationExecutor<CustomField> {
     fun findByNameIn(name: List<String>): MutableList<CustomField>
     fun deleteByNameIn(name: List<String>)
-    fun findByName(name: String): CustomField?
+    fun findByName(name: String): MutableList<CustomField>
     @Query("""
         SELECT cf FROM CustomField cf
         JOIN cf.customFieldToEntityTypes cfe
