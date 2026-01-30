@@ -11,13 +11,28 @@ data class GreaterThanExpr(
 
     override fun <T> toSpecification(): Specification<T> {
         val numericValue = value.toDoubleOrNull()
-            ?: throw QlParseException("Значение '$value' не является числом  не поддерживает оператор '>'")
-        return Specification { root, _, cb ->
+            ?: throw QlParseException("Значение '$value' не является числом и не поддерживает оператор '>'")
+
+        return Specification { root, query, cb ->
+            val isUuid = field.matches(Regex("""\p{XDigit}{8}-\p{XDigit}{4}-\p{XDigit}{4}-\p{XDigit}{4}-\p{XDigit}{12}"""))
+            val fieldKeyPath = if (isUuid) {
+                query?.distinct(true)
+                root.join<Any, Any>("entityType")
+                    .join<Any, Any>("customFields")
+                    .join<Any, Any>("customField")
+                    .apply {
+                    }
+            } else null
+            val fieldNameExpression = if (fieldKeyPath != null) {
+                fieldKeyPath.get("name")
+            } else {
+                cb.literal(field)
+            }
             val jsonExtract = cb.function(
                 "jsonb_extract_path_text",
                 String::class.java,
                 root.get<String>("properties"),
-                cb.literal(field)
+                fieldNameExpression
             )
             val numericPath = cb.function(
                 "to_number",
@@ -25,8 +40,14 @@ data class GreaterThanExpr(
                 jsonExtract,
                 cb.literal("999999999D")
             )
-            cb.greaterThan(numericPath, numericValue)
+            val greaterThanPredicate = cb.greaterThan(numericPath, numericValue)
+            if (fieldKeyPath != null) {
+                cb.and(cb.equal(fieldKeyPath.get<String>("code"), field), greaterThanPredicate)
+            } else {
+                greaterThanPredicate
+            }
         }
     }
+
 
 }
