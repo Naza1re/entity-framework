@@ -23,4 +23,6 @@ interface CustomFieldRepository : JpaRepository<CustomField, Long>, JpaSpecifica
         @Param("name") name: String,
         @Param("entityTypeCode") entityTypeCode: String
     ): CustomField?
+
+    fun findByCode(code: String): CustomField?
 }

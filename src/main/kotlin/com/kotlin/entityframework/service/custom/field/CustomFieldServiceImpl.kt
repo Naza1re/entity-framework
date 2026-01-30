@@ -2,7 +2,9 @@ package com.kotlin.entityframework.service.custom.field
 
 import com.kotlin.entityframework.dto.custom.field.request.CustomFieldRequest
 import com.kotlin.entityframework.exception.CustomFieldNotFoundException
+import com.kotlin.entityframework.exception.MetadataNotFoundException
 import com.kotlin.entityframework.model.custom.field.CustomField
+import com.kotlin.entityframework.model.custom.field.CustomFieldType
 import com.kotlin.entityframework.repository.custom.field.CustomFieldRepository
 import com.kotlin.entityframework.service.CustomFieldService
 import org.springframework.stereotype.Service
@@ -37,6 +39,12 @@ class CustomFieldServiceImpl(
         return repository.findByNameAndEntityTypeCode(name, entityTypeCode) ?: throw CustomFieldNotFoundException("Custom field with name $name not found")
     }
 
+    override fun getCustomFieldTypeByCode(code: String): CustomFieldType {
+        val customField = repository.findByCode(code)
+            ?: throw CustomFieldNotFoundException("Custom field with code $code not found")
 
+        return customField.metadata?.type
+            ?: throw MetadataNotFoundException("Metadata or type is missing for custom field with code $code")
+    }
 
 }

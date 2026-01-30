@@ -30,7 +30,8 @@ class EntityServiceImpl (
     private val repository : EntityRepository,
     private val entityTypeService : EntityTypeService,
     private val entityMapper: EntityMapper,
-    private val customFieldService: CustomFieldService
+    private val customFieldService: CustomFieldService,
+    private val specificationCreator: SpecificationCreator
 ) : EntityService {
 
     @Transactional(readOnly = true)
@@ -42,7 +43,7 @@ class EntityServiceImpl (
     override fun search(qlSearchRequest: QlSearchRequest): List<EntityResponse> {
 
         val pageRequest = PageRequest.of(qlSearchRequest.page, qlSearchRequest.pageSize)
-        val specification = SpecificationCreator.entitySpecificationCreate(qlSearchRequest.query)
+        val specification = specificationCreator.entitySpecificationCreate<Entity>(qlSearchRequest.query)
 
         val entityList = repository.findAll(specification, pageRequest)
         return entityMapper.toEntityListAfterQlSearch(entityList.content)
