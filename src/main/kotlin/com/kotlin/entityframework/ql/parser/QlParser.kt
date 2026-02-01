@@ -12,7 +12,11 @@ object QlParser {
     }
 
     private fun tokenize(input: String): List<String> {
-        val regex = Regex("\\s*(and|or|like|=|'[^']*'|\\w+)\\s*", RegexOption.IGNORE_CASE)
+        // Добавлен паттерн для UUID: [0-9a-fA-F]{8}-...
+        val regex = Regex(
+            "\\s*(and|or|like|=|>|'[^']*'|[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|\\w+)\\s*",
+            RegexOption.IGNORE_CASE
+        )
         return regex.findAll(input).map { it.groupValues[1].trim() }.toList()
     }
 
@@ -26,7 +30,7 @@ object QlParser {
         }
 
         // AND
-        val andIndex = tokens.indexOfFirst { it.equals(QlOperators.AND, ignoreCase = true) }
+        val andIndex = tokens.indexOfFirst {it.equals(QlOperators.AND, ignoreCase = true) }
         if (andIndex != -1) {
             val left = parseTokens(tokens.subList(0, andIndex))
             val right = parseTokens(tokens.subList(andIndex + 1, tokens.size))
@@ -38,6 +42,13 @@ object QlParser {
             val field = tokens[0]
             val value = tokens[2].removeSurrounding("'")
             return EqualsExpr(field, value)
+        }
+
+        // field[numeric] > value[numeric]
+        if (tokens.size == 3 && tokens[1] == QlOperators.GREATER_THAN) {
+            val field = tokens[0]
+            val value = tokens[2]
+            return GreaterThanExpr(field, value)
         }
 
         // field like '%value%'

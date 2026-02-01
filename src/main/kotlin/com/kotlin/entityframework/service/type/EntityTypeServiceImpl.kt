@@ -21,6 +21,7 @@ import com.kotlin.entityframework.service.EntityTypeService
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.UUID
 
 @Service
 class EntityTypeServiceImpl(
@@ -57,8 +58,8 @@ class EntityTypeServiceImpl(
     @Transactional
     override fun updateEntityType(entityTypeCode: String, updateRequest: EntityTypeUpdateRequest): EntityTypeResponse {
         val entityType = getEntityTypeByCode(entityTypeCode)
-        updateRequest.customFieldsToDelete?.let { codesToDelete ->
-            val codes = customFieldsService.getCustomFieldsByCodes(codesToDelete)
+        updateRequest.customFieldsToDelete?.let { namesToDelete ->
+            val codes = customFieldsService.getCustomFieldsByNames(namesToDelete)
                 .map { it.code }
             customFieldsService.deleteCustomFields(codes)
         }
@@ -112,9 +113,10 @@ class EntityTypeServiceImpl(
             : List<CustomFieldEntityType> {
         return customFieldsRequest.map { cfr ->
 
-            val customField = customFieldRepository.findByCode(cfr.code) ?: run {
+            val customField = customFieldRepository.findByNameAndEntityTypeCode(cfr.name, entityType.code) ?: run {
                 val newField = CustomField(
-                    code = cfr.code,
+                    code = UUID.randomUUID().toString(),
+                    name = cfr.name,
                     min = 0,
                     max = 100
                 )

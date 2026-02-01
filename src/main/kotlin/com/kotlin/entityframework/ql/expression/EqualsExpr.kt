@@ -1,11 +1,9 @@
 package com.kotlin.entityframework.ql.expression
 
-import org.springframework.data.jpa.domain.Specification
+import com.kotlin.entityframework.repository.specification.QlVisitor
 
-data class EqualsExpr(val field: String, val value: String) : QlExpression {
-    override fun <T> toSpecification(): Specification<T> {
-        return Specification { root, _, cb ->
-            cb.equal(root.get<String>(field), value)
-        }
-    }
+
+data class EqualsExpr(val field: String,val value: String) : QlExpression {
+
+    override fun <R> accept(visitor: QlVisitor<R>): R = visitor.visit(this)
 }

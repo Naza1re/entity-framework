@@ -17,7 +17,8 @@ class CustomExceptionHandler {
     @ExceptionHandler(EntityNotFoundException::class,
         EntityTypeNotFoundException::class,
         EntityTypeNotContainsSuchCustomFieldException::class,
-        CustomFieldNotFoundException::class)
+        CustomFieldNotFoundException::class,
+        MetadataNotFoundException::class)
     fun handleNotFound(notFoundException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
         val message = notFoundException.message ?: UNKNOWN_ERROR
         return ResponseEntity<ApplicationExceptionObject>(
@@ -27,7 +28,8 @@ class CustomExceptionHandler {
     @ExceptionHandler(EntityTypeCodeNotAlloyedException::class,
         EntityTypeAlreadyExistException::class,
         NotAlloyedValueException::class,
-        MissingRequiredCustomFieldException::class)
+        MissingRequiredCustomFieldException::class,
+        OperationNotSupportedException::class)
     fun handleConflictException(conflictException: RuntimeException) : ResponseEntity<ApplicationExceptionObject> {
         val message = conflictException.message ?: UNKNOWN_ERROR
         return ResponseEntity<ApplicationExceptionObject>(

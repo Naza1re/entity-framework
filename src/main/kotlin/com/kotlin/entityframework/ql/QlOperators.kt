@@ -6,4 +6,5 @@ object QlOperators {
     const val LIKE = "like"
     const val AND = "and"
     const val OR = "or"
+    const val GREATER_THAN = ">"
 }

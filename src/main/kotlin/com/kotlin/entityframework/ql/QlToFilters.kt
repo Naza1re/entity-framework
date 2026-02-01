@@ -23,6 +23,7 @@ object QlToFilters {
                 collect(expr.left, map)
                 collect(expr.right, map)
             }
+            is GreaterThanExpr -> map[expr.field] = expr.value
             is OrExpr -> throw IllegalArgumentException("OR не поддерживается в byProperties.")
             else -> throw IllegalArgumentException("Неизвестный тип выражения: $expr")
         }

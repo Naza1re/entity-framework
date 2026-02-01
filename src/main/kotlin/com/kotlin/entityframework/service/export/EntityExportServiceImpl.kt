@@ -3,6 +3,7 @@ package com.kotlin.entityframework.service.export
 import com.kotlin.entityframework.config.EntityImportProperties
 import com.kotlin.entityframework.dto.entity.request.ExportRequest
 import com.kotlin.entityframework.export.FieldProvider
+import com.kotlin.entityframework.model.entity.Entity
 import com.kotlin.entityframework.repository.entity.EntityRepository
 import com.kotlin.entityframework.repository.specification.SpecificationCreator
 import com.kotlin.entityframework.service.ExportService
@@ -16,6 +17,7 @@ class EntityExportServiceImpl(
     private val importProperties: EntityImportProperties,
     private val entityRepository: EntityRepository,
     private val fieldProviders: List<FieldProvider>,
+    private val specificationCreator: SpecificationCreator
 ): ExportService {
 
     companion object {
@@ -42,7 +44,7 @@ class EntityExportServiceImpl(
             cell.setCellValue(header)
         }
         val pageRequest = PageRequest.of(exportRequest.page, exportRequest.pageSize)
-        val specification = SpecificationCreator.entitySpecificationCreate(exportRequest.query)
+        val specification = specificationCreator.entitySpecificationCreate<Entity>(exportRequest.query)
 
         val entities = entityRepository.findAll(specification, pageRequest)
 

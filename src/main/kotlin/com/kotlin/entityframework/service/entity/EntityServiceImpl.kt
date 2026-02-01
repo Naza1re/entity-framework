@@ -30,7 +30,8 @@ class EntityServiceImpl (
     private val repository : EntityRepository,
     private val entityTypeService : EntityTypeService,
     private val entityMapper: EntityMapper,
-    private val customFieldService: CustomFieldService
+    private val customFieldService: CustomFieldService,
+    private val specificationCreator: SpecificationCreator
 ) : EntityService {
 
     @Transactional(readOnly = true)
@@ -42,7 +43,7 @@ class EntityServiceImpl (
     override fun search(qlSearchRequest: QlSearchRequest): List<EntityResponse> {
 
         val pageRequest = PageRequest.of(qlSearchRequest.page, qlSearchRequest.pageSize)
-        val specification = SpecificationCreator.entitySpecificationCreate(qlSearchRequest.query)
+        val specification = specificationCreator.entitySpecificationCreate<Entity>(qlSearchRequest.query)
 
         val entityList = repository.findAll(specification, pageRequest)
         return entityMapper.toEntityListAfterQlSearch(entityList.content)
@@ -81,8 +82,8 @@ class EntityServiceImpl (
 
     private fun validateCustomFields(params: Map<String, Any>, entityType: EntityType) {
         val listOfEntityTypeFields = entityType.customFields
-        val customFieldCodes = listOfEntityTypeFields.map {
-            customField -> customField.customField.code
+        val customFieldNames = listOfEntityTypeFields.map {
+            customField -> customField.customField.name
         }
 
         val requiredCustomFieldsCodes = listOfEntityTypeFields
@@ -96,11 +97,11 @@ class EntityServiceImpl (
         }
 
         for (key in params.keys) {
-            if (!customFieldCodes.contains(key)) {
-                throw EntityTypeNotContainsSuchCustomFieldException("Field with code $key not allowed for this entityType")
+            if (!customFieldNames.contains(key)) {
+                throw EntityTypeNotContainsSuchCustomFieldException("Field with name '$key' not allowed for this entityType")
             }
             val value = params[key]
-            val customField = customFieldService.getCustomFieldByCode(key)
+            val customField = customFieldService.getCustomFieldByNameAndEntityTypeCode(key, entityType.code)
             val max = customField.max
             val min = customField.min
             when (value) {
